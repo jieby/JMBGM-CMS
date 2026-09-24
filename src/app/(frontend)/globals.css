@@ -1,0 +1,71 @@
+@import "tailwindcss";
+@import "tw-animate-css";
+
+@custom-variant dark (&:is(.dark *));
+
+:root {
+  --background: #FBF6EE;
+  --foreground: #2F3E33;
+  --card: #FFFFFF;
+  --card-foreground: #2F3E33;
+  --popover: #FFFFFF;
+  --popover-foreground: #2F3E33;
+  --primary: #2F3E33;
+  --primary-foreground: #FBF6EE;
+  --secondary: #EFE8DC;
+  --secondary-foreground: #2F3E33;
+  --muted: #E8E1D5;
+  --muted-foreground: #5C6F62;
+  --accent: #C1683B;
+  --accent-foreground: #FFFFFF;
+  --destructive: #B91C1C;
+  --destructive-foreground: #FFFFFF;
+  --border: #E2D9CC;
+  --input: #E2D9CC;
+  --ring: #C1683B;
+  --radius: 0.625rem;
+
+  /* JMBGM Palette Tokens */
+  --warm-ivory: #FBF6EE;
+  --deep-forest: #2F3E33;
+  --terracotta: #C1683B;
+  --olive-sage: #8A9A5B;
+}
+
+@theme inline {
+  --radius-sm: calc(var(--radius) - 4px);
+  --radius-md: calc(var(--radius) - 2px);
+  --radius-lg: var(--radius);
+  --radius-xl: calc(var(--radius) + 4px);
+  --color-background: var(--background);
+  --color-foreground: var(--foreground);
+  --color-card: var(--card);
+  --color-card-foreground: var(--card-foreground);
+  --color-popover: var(--popover);
+  --color-popover-foreground: var(--popover-foreground);
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
+  --color-muted: var(--muted);
+  --color-muted-foreground: var(--muted-foreground);
+  --color-accent: var(--accent);
+  --color-accent-foreground: var(--accent-foreground);
+  --color-destructive: var(--destructive);
+  --color-border: var(--border);
+  --color-input: var(--input);
+  --color-ring: var(--ring);
+
+  /* Direct Named Color Aliases */
+  --color-warm-ivory: #FBF6EE;
+  --color-deep-forest: #2F3E33;
+  --color-terracotta: #C1683B;
+  --color-olive-sage: #8A9A5B;
+}
+
+body {
+  background-color: var(--background);
+  color: var(--foreground);
+  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+  min-height: 100vh;
+}
