@@ -26,7 +26,6 @@ import {
   AlertCircle,
   Database,
   ExternalLink,
-  Sparkles,
 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
@@ -104,40 +103,7 @@ export default async function HomePage() {
         </section>
       )}
 
-      {/* Hero Section */}
-      <section className="relative overflow-hidden px-4 py-16 sm:px-6 sm:py-24 md:py-28">
-        <div className="mx-auto max-w-4xl text-center space-y-6">
-          <div className="inline-flex items-center gap-2 rounded-full border border-[#8A9A5B]/40 bg-[#8A9A5B]/10 px-3.5 py-1 text-xs font-semibold text-[#2F3E33]">
-            <span className="h-1.5 w-1.5 rounded-full bg-[#8A9A5B]" />
-            Faith • Fellowship • Community Transformation
-          </div>
-
-          <h1 className="text-3xl font-extrabold tracking-tight text-[#2F3E33] sm:text-5xl md:text-6xl">
-            Jesus the Master Builder Global Ministry
-          </h1>
-
-          <p className="mx-auto max-w-2xl text-base sm:text-lg text-[#5C6F62] leading-relaxed">
-            Welcome to the digital home of JMBGM. Dedicated to Christ-centered worship,
-            discipleship, and gospel mission. Powered by Next.js 16 SSR &amp; Payload CMS 3.
-          </p>
-
-          <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
-            <Button asChild variant="terracotta" size="lg" className="w-full sm:w-auto font-semibold">
-              <a href="#cinematic-narrative">
-                <Sparkles className="mr-2 h-4 w-4" />
-                Experience 5-Act Narrative
-              </a>
-            </Button>
-            <Button asChild variant="forest" size="lg" className="w-full sm:w-auto font-semibold">
-              <a href="#connect">
-                Service Times &amp; Connect
-              </a>
-            </Button>
-          </div>
-        </div>
-      </section>
-
-      {/* 🎬 The 5-Act Cinematic Narrative Blueprint */}
+      {/* 🎬 The 5-Act Cinematic Narrative Hero Stage */}
       <section aria-label="Cinematic Ministry Narrative" className="w-full">
         {/* Desktop Experience: Lenis Smooth Scroll + Pinned Sticky Stage (h-screen, h-[500vh] track) */}
         <ScrollyStage acts={acts} />

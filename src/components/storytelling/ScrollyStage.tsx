@@ -22,11 +22,11 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
     offset: ['start start', 'end end'],
   })
 
-  // Track active act index from scroll progression
+  // Track active act index from scroll progression aligned to anchors [0, 0.25, 0.50, 0.75, 1.0]
   useMotionValueEvent(scrollYProgress, 'change', (latest) => {
     const totalActs = acts.length
     const computedIndex = Math.min(
-      Math.floor(latest * totalActs),
+      Math.max(0, Math.round(latest * (totalActs - 1))),
       totalActs - 1
     )
     if (computedIndex !== activeActIndex) {
@@ -34,7 +34,7 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
     }
   })
 
-  // Programmatic smooth scroll to a specific act
+  // Programmatic smooth scroll to a specific act anchor
   const scrollToAct = (index: number) => {
     if (!containerRef.current) return
     const containerTop = containerRef.current.getBoundingClientRect().top + window.scrollY
@@ -54,8 +54,8 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
       className="relative hidden md:block h-[500vh] w-full bg-[#16221A] text-[#FBF6EE]"
       id="cinematic-narrative"
     >
-      {/* Pinned Sticky Stage Viewport */}
-      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between">
+      {/* Pinned Sticky Stage Viewport with pt-16 for site header clearance */}
+      <div className="sticky top-0 h-screen w-full overflow-hidden flex flex-col justify-between pt-16">
         {/* Layer 1: Background Visual Crossfade & Atmosphere */}
         <div className="absolute inset-0 z-0">
           {acts.map((act, index) => (
@@ -63,7 +63,6 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
               key={act.chapterKey}
               act={act}
               index={index}
-              total={acts.length}
               scrollYProgress={scrollYProgress}
             />
           ))}
@@ -73,7 +72,7 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
         <AtmosphericClouds intensity={0.45} />
 
         {/* Layer 3: Top Navigation Bar / Scrubber Header */}
-        <header className="relative z-30 flex items-center justify-between px-8 pt-6 pb-4">
+        <header className="relative z-30 flex items-center justify-between px-8 pt-4 pb-2">
           <div className="flex items-center gap-3">
             <span className="flex h-2.5 w-2.5 rounded-full bg-[#E3A857] shadow-[0_0_12px_#E3A857] animate-pulse" />
             <span className="text-xs font-semibold uppercase tracking-[0.25em] text-[#E2D9CC]/90">
@@ -85,6 +84,7 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
           <nav className="flex items-center gap-2 rounded-full border border-white/10 bg-[#2F3E33]/70 backdrop-blur-md px-4 py-2 shadow-lg">
             {acts.map((act, index) => {
               const isActive = activeActIndex === index
+              const pillLabel = index === 0 ? 'JMBGM' : act.headline
               return (
                 <button
                   key={act.chapterKey}
@@ -99,7 +99,7 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
                   <span className="font-mono text-[11px]">{act.actRoman}</span>
                   {isActive && (
                     <span className="max-w-[130px] truncate text-[11px] font-medium hidden lg:inline">
-                      {act.headline}
+                      {pillLabel}
                     </span>
                   )}
                 </button>
@@ -110,13 +110,12 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
 
         {/* Layer 4: Main Kinetic Typography Content Stage */}
         <main className="relative z-30 flex-1 flex items-center justify-center px-6 lg:px-16 pointer-events-none">
-          <div className="w-full max-w-4xl mx-auto">
+          <div className="w-full max-w-4xl mx-auto relative flex items-center justify-center min-h-[360px]">
             {acts.map((act, index) => (
               <ActTypographyFrame
                 key={act.chapterKey}
                 act={act}
                 index={index}
-                total={acts.length}
                 scrollYProgress={scrollYProgress}
               />
             ))}
@@ -147,40 +146,38 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
   )
 }
 
-/** Individual visual background frame scrubbed via Motion v12 useTransform */
+/** 
+ * Background video frames calibrated around anchors [0.00, 0.25, 0.50, 0.75, 1.00].
+ * Clean crossfades that stay 100% solid around the act's active center.
+ */
 function ActVisualFrame({
   act,
   index,
-  total,
   scrollYProgress,
 }: {
   act: StoryActMeta & { backgroundMediaUrl?: string }
   index: number
-  total: number
   scrollYProgress: MotionValue<number>
 }) {
-  const step = 1 / total
-  const enterStart = index === 0 ? 0 : (index - 0.5) * step
-  const enterPeak = index * step
-  const exitStart = (index + 0.6) * step
-  const exitEnd = index === total - 1 ? 1.0 : (index + 1.2) * step
+  const ranges: Record<number, { inputs: number[]; outputs: number[] }> = {
+    0: { inputs: [0.00, 0.10, 0.15, 1.00], outputs: [1, 1, 0, 0] },
+    1: { inputs: [0.00, 0.10, 0.15, 0.35, 0.40, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
+    2: { inputs: [0.00, 0.35, 0.40, 0.60, 0.65, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
+    3: { inputs: [0.00, 0.60, 0.65, 0.85, 0.90, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
+    4: { inputs: [0.00, 0.85, 0.90, 1.00], outputs: [0, 0, 1, 1] },
+  }
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [enterStart, enterPeak, exitStart, exitEnd],
-    [index === 0 ? 1 : 0, 1, 1, index === total - 1 ? 1 : 0]
-  )
-
-  const scale = useTransform(
-    scrollYProgress,
-    [enterStart, enterPeak, exitEnd],
-    [1.08, 1.0, 0.96]
-  )
+  const actRange = ranges[index] || { inputs: [0, 1], outputs: [0, 0] }
+  const opacity = useTransform(scrollYProgress, actRange.inputs, actRange.outputs)
+  const visibility = useTransform(opacity, (val) => (val > 0.01 ? 'visible' : 'hidden'))
 
   return (
     <motion.div
-      style={{ opacity, scale }}
-      className="absolute inset-0 h-full w-full pointer-events-none will-change-[opacity,transform]"
+      style={{
+        opacity,
+        visibility,
+      }}
+      className="absolute inset-0 h-full w-full pointer-events-none will-change-[opacity]"
     >
       <ActVisual
         order={act.order}
@@ -191,45 +188,76 @@ function ActVisualFrame({
   )
 }
 
-/** Individual kinetic typography card scrubbed via Motion v12 useTransform */
+/** 
+ * Kinetic typography cards with strict non-overlapping intervals around anchors:
+ * Act 0: 0.00 | Act 1: 0.25 | Act 2: 0.50 | Act 3: 0.75 | Act 4: 1.00
+ * Each act exits completely with a clear transition gap before the next act begins entering.
+ * Zero text overlapping guaranteed.
+ */
 function ActTypographyFrame({
   act,
   index,
-  total,
   scrollYProgress,
 }: {
   act: StoryActMeta
   index: number
-  total: number
   scrollYProgress: MotionValue<number>
 }) {
-  const step = 1 / total
-  const enterStart = index === 0 ? 0 : Math.max(0, (index - 0.4) * step)
-  const enterPeak = (index + 0.05) * step
-  const exitStart = (index + 0.65) * step
-  const exitEnd = index === total - 1 ? 1.0 : Math.min(1.0, (index + 1.15) * step)
+  const ranges: Record<
+    number,
+    { inputs: number[]; opacityOutputs: number[]; yOutputs: number[] }
+  > = {
+    // Act 0: Active from 0.00 to 0.08, exits 0.08-0.11, completely 0 from 0.11 to 1.0
+    0: {
+      inputs: [0.00, 0.08, 0.11, 1.00],
+      opacityOutputs: [1, 1, 0, 0],
+      yOutputs: [0, 0, -30, -30],
+    },
+    // Act 1: Enters 0.14-0.17, solid 0.17-0.33, exits 0.33-0.36, 0 everywhere else
+    1: {
+      inputs: [0.00, 0.14, 0.17, 0.33, 0.36, 1.00],
+      opacityOutputs: [0, 0, 1, 1, 0, 0],
+      yOutputs: [30, 30, 0, 0, -30, -30],
+    },
+    // Act 2: Enters 0.39-0.42, solid 0.42-0.58, exits 0.58-0.61, 0 everywhere else
+    2: {
+      inputs: [0.00, 0.39, 0.42, 0.58, 0.61, 1.00],
+      opacityOutputs: [0, 0, 1, 1, 0, 0],
+      yOutputs: [30, 30, 0, 0, -30, -30],
+    },
+    // Act 3: Enters 0.64-0.67, solid 0.67-0.83, exits 0.83-0.86, 0 everywhere else
+    3: {
+      inputs: [0.00, 0.64, 0.67, 0.83, 0.86, 1.00],
+      opacityOutputs: [0, 0, 1, 1, 0, 0],
+      yOutputs: [30, 30, 0, 0, -30, -30],
+    },
+    // Act 4: Enters 0.89-0.92, solid 0.92-1.00
+    4: {
+      inputs: [0.00, 0.89, 0.92, 1.00],
+      opacityOutputs: [0, 0, 1, 1],
+      yOutputs: [30, 30, 0, 0],
+    },
+  }
 
-  const opacity = useTransform(
-    scrollYProgress,
-    [enterStart, enterPeak, exitStart, exitEnd],
-    [index === 0 ? 1 : 0, 1, 1, index === total - 1 ? 1 : 0]
-  )
+  const actRange = ranges[index] || {
+    inputs: [0, 1],
+    opacityOutputs: [0, 0],
+    yOutputs: [0, 0],
+  }
 
-  const y = useTransform(
-    scrollYProgress,
-    [enterStart, enterPeak, exitStart, exitEnd],
-    [index === 0 ? 0 : 35, 0, 0, index === total - 1 ? 0 : -35]
-  )
-
-  const scale = useTransform(
-    scrollYProgress,
-    [enterStart, enterPeak, exitStart, exitEnd],
-    [index === 0 ? 1 : 0.94, 1, 1, index === total - 1 ? 1 : 0.96]
-  )
+  const opacity = useTransform(scrollYProgress, actRange.inputs, actRange.opacityOutputs)
+  const y = useTransform(scrollYProgress, actRange.inputs, actRange.yOutputs)
+  const display = useTransform(opacity, (val) => (val > 0.01 ? 'flex' : 'none'))
+  const visibility = useTransform(opacity, (val) => (val > 0.01 ? 'visible' : 'hidden'))
 
   return (
     <motion.div
-      style={{ opacity, y, scale }}
+      style={{
+        opacity,
+        y,
+        display,
+        visibility,
+      }}
       className="absolute inset-x-0 mx-auto max-w-3xl flex flex-col items-center text-center px-4 will-change-[opacity,transform]"
     >
       {/* Pillar Badge */}
@@ -244,7 +272,7 @@ function ActTypographyFrame({
       </div>
 
       {/* Main Cinematic Headline */}
-      <h2 className="text-4xl sm:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#FBF6EE] drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] leading-tight mb-5">
+      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#FBF6EE] drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] leading-tight mb-5 max-w-3xl">
         {act.headline}
       </h2>
 

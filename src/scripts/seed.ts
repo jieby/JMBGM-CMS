@@ -146,7 +146,7 @@ async function seed() {
         order: 0,
         chapterKey: 'prologue',
         pillarName: 'Prologue • The Sovereign Architect',
-        headline: "The Master Builder's Blueprint",
+        headline: 'Jesus the Master Builder Global Ministry',
         subheadline:
           "Everything begins in God's sovereign hands. Before the foundations of the cosmos were laid, the divine master builder set every destiny in motion.",
         scriptureRef: 'Hebrews 3:4',

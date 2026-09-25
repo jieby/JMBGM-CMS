@@ -1,6 +1,6 @@
 'use client'
 
-import React, { useState } from 'react'
+import React, { useState, useRef, useEffect } from 'react'
 
 interface ActVisualProps {
   order: number
@@ -10,6 +10,15 @@ interface ActVisualProps {
 
 export function ActVisual({ order, mediaUrl, alt }: ActVisualProps) {
   const [videoError, setVideoError] = useState(false)
+  const videoRef = useRef<HTMLVideoElement>(null)
+
+  useEffect(() => {
+    if (videoRef.current) {
+      videoRef.current.muted = true
+      videoRef.current.defaultMuted = true
+      videoRef.current.play().catch(() => {})
+    }
+  }, [mediaUrl])
 
   // If user provided a video or image asset and it hasn't errored
   if (mediaUrl && !videoError) {
@@ -23,15 +32,24 @@ export function ActVisual({ order, mediaUrl, alt }: ActVisualProps) {
       <div className="absolute inset-0 h-full w-full overflow-hidden">
         {isVideo ? (
           <video
+            ref={videoRef}
             autoPlay
             loop
             muted
             playsInline
             preload="auto"
             className="h-full w-full object-cover"
-            src={mediaUrl}
-            onError={() => setVideoError(true)}
-          />
+            onError={(e) => {
+              const code = e.currentTarget.error?.code
+              // Only fallback on genuine decode (3) or src not supported (4) errors.
+              // Never fallback on MEDIA_ERR_ABORTED (1) or network throttle (2).
+              if (code === 3 || code === 4) {
+                setVideoError(true)
+              }
+            }}
+          >
+            <source src={mediaUrl} type="video/mp4" />
+          </video>
         ) : (
           /* eslint-disable-next-line @next/next/no-img-element */
           <img
