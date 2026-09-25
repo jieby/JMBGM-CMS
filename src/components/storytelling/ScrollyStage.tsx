@@ -171,6 +171,23 @@ function ActVisualFrame({
   const opacity = useTransform(scrollYProgress, actRange.inputs, actRange.outputs)
   const visibility = useTransform(opacity, (val) => (val > 0.01 ? 'visible' : 'hidden'))
 
+  // Scroll scrub windows: maps scroll progression within each act's focus range from 0.0 to 1.0
+  const scrubWindows: Record<number, { start: number; end: number }> = {
+    0: { start: 0.00, end: 0.12 },
+    1: { start: 0.14, end: 0.35 },
+    2: { start: 0.39, end: 0.60 },
+    3: { start: 0.64, end: 0.85 },
+    4: { start: 0.89, end: 1.00 },
+  }
+
+  const windowRange = scrubWindows[index] || { start: 0, end: 1 }
+  const progress = useTransform(
+    scrollYProgress,
+    [windowRange.start, windowRange.end],
+    [0, 1],
+    { clamp: true }
+  )
+
   return (
     <motion.div
       style={{
@@ -183,6 +200,7 @@ function ActVisualFrame({
         order={act.order}
         mediaUrl={act.backgroundMediaUrl}
         alt={act.headline}
+        progress={progress}
       />
     </motion.div>
   )

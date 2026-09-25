@@ -1,24 +1,80 @@
 'use client'
 
 import React, { useState, useRef, useEffect } from 'react'
+import type { MotionValue } from 'motion/react'
 
-interface ActVisualProps {
+export interface ActVisualProps {
   order: number
   mediaUrl?: string
   alt?: string
+  progress?: MotionValue<number>
 }
 
-export function ActVisual({ order, mediaUrl, alt }: ActVisualProps) {
+export function ActVisual({ order, mediaUrl, alt, progress }: ActVisualProps) {
   const [videoError, setVideoError] = useState(false)
   const videoRef = useRef<HTMLVideoElement>(null)
 
   useEffect(() => {
-    if (videoRef.current) {
-      videoRef.current.muted = true
-      videoRef.current.defaultMuted = true
-      videoRef.current.play().catch(() => {})
+    const video = videoRef.current
+    if (!video) return
+
+    video.muted = true
+    video.defaultMuted = true
+
+    // When progress is provided, video playhead is controlled exclusively via scroll
+    if (progress) {
+      video.pause()
+    } else {
+      video.play().catch(() => {})
     }
-  }, [mediaUrl])
+  }, [mediaUrl, progress])
+
+  // Scroll scrub controller with rAF damping for 60-120fps fluid playback
+  useEffect(() => {
+    const video = videoRef.current
+    if (!video || !progress) return
+
+    let rafId: number
+    let targetTime = 0
+
+    const updatePlayhead = (val: number) => {
+      if (video.duration && !isNaN(video.duration) && video.duration > 0) {
+        targetTime = Math.min(Math.max(0, val * video.duration), video.duration)
+      }
+    }
+
+    const onFrame = () => {
+      if (video.duration && !isNaN(video.duration) && video.duration > 0) {
+        if (Math.abs(video.currentTime - targetTime) > 0.02) {
+          if ('fastSeek' in video && typeof (video as any).fastSeek === 'function') {
+            ;(video as any).fastSeek(targetTime)
+          } else {
+            video.currentTime = targetTime
+          }
+        }
+      }
+      rafId = requestAnimationFrame(onFrame)
+    }
+
+    const handleLoadedMetadata = () => {
+      updatePlayhead(progress.get())
+      if (video.duration && !isNaN(video.duration) && video.duration > 0) {
+        video.currentTime = targetTime
+      }
+    }
+
+    video.addEventListener('loadedmetadata', handleLoadedMetadata)
+    updatePlayhead(progress.get())
+
+    const unsubscribe = progress.on('change', updatePlayhead)
+    rafId = requestAnimationFrame(onFrame)
+
+    return () => {
+      video.removeEventListener('loadedmetadata', handleLoadedMetadata)
+      unsubscribe()
+      cancelAnimationFrame(rafId)
+    }
+  }, [progress, mediaUrl])
 
   // If user provided a video or image asset and it hasn't errored
   if (mediaUrl && !videoError) {
@@ -33,8 +89,8 @@ export function ActVisual({ order, mediaUrl, alt }: ActVisualProps) {
         {isVideo ? (
           <video
             ref={videoRef}
-            autoPlay
-            loop
+            autoPlay={!progress}
+            loop={!progress}
             muted
             playsInline
             preload="auto"
