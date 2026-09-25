@@ -79,7 +79,7 @@ export function Header() {
                   </SheetTitle>
                 </div>
                 <p className="text-xs text-[#5C6F62]">
-                  Jesus Miracle Bible Gospel Ministry
+                  Jesus the Master Builder Global Ministry
                 </p>
               </SheetHeader>
               <Separator className="mb-6 bg-[#E2D9CC]" />

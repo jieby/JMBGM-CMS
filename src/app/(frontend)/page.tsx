@@ -85,12 +85,12 @@ export default async function HomePage() {
           </div>
 
           <h1 className="text-3xl font-extrabold tracking-tight text-[#2F3E33] sm:text-5xl md:text-6xl">
-            Jesus Miracle Bible Gospel Ministry
+            Jesus the Master Builder Global Ministry
           </h1>
 
           <p className="mx-auto max-w-2xl text-base sm:text-lg text-[#5C6F62] leading-relaxed">
             Welcome to the digital home of JMBGM. Dedicated to Christ-centered worship,
-            discipleship, and community service. Powered by Next.js 16 SSR &amp; Payload CMS 3.
+            discipleship, and gospel mission. Powered by Next.js 16 SSR &amp; Payload CMS 3.
           </p>
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">

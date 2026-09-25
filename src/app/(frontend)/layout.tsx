@@ -4,9 +4,9 @@ import { Footer } from '@/components/layout/Footer'
 import './globals.css'
 
 export const metadata: Metadata = {
-  title: 'JMBGM | Jesus Miracle Bible Gospel Ministry',
+  title: 'JMBGM | Jesus the Master Builder Global Ministry',
   description:
-    'Proclaiming truth, building community, and transforming lives through faith. Built with Next.js 16, Payload CMS 3, Supabase, and ShadCN UI.',
+    'Proclaiming truth, building disciples, and transforming lives through faith. Built with Next.js 16, Payload CMS 3, Supabase, and ShadCN UI.',
 }
 
 export default function FrontendLayout({

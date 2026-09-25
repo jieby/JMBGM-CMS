@@ -17,7 +17,7 @@ export function Footer() {
               </span>
             </div>
             <p className="text-sm text-[#FBF6EE]/75 leading-relaxed">
-              Jesus Miracle Bible Gospel Ministry. Proclaiming truth, building community, and transforming lives through faith.
+              Jesus the Master Builder Global Ministry. Proclaiming truth, building disciples, and transforming communities through Christ.
             </p>
           </div>
 

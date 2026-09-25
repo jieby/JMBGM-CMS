@@ -1,6 +1,6 @@
-# JMBGM App (Jesus Miracle Bible Gospel Ministry)
+# JMBGM App (Jesus the Master Builder Global Ministry)
 
-A modern, SSR-first web portal and content management system for **Jesus Miracle Bible Gospel Ministry (JMBGM)**. Built with **Next.js 16 (App Router)**, **Payload CMS 3**, **Supabase PostgreSQL**, and **ShadCN UI** with a custom mobile-first aesthetic.
+A modern, SSR-first web portal and content management system for **Jesus the Master Builder Global Ministry (JMBGM)**. Built with **Next.js 16 (App Router)**, **Payload CMS 3**, **Supabase PostgreSQL**, and **ShadCN UI** with a custom mobile-first aesthetic.
 
 ---
 
@@ -257,5 +257,5 @@ npm run dev
 
 ## 📄 License & Attribution
 
-Designed and maintained for **Jesus Miracle Bible Gospel Ministry (JMBGM)**.
+Designed and maintained for **Jesus the Master Builder Global Ministry (JMBGM)**.
 Git Remote: `git@github.com:jieby/JMBGM-CMS.git`.
