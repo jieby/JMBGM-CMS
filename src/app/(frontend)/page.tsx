@@ -1,7 +1,11 @@
 import Link from "next/link"
 import { getPayload } from "payload"
 import config from "@payload-config"
-import type { Announcement } from "@/payload-types"
+import type { Announcement, StoryChapter } from "@/payload-types"
+import { ScrollyStage } from "@/components/storytelling/ScrollyStage"
+import { MobileStoryCards } from "@/components/storytelling/MobileStoryCards"
+import { ClosingPortal } from "@/components/storytelling/ClosingPortal"
+import { mergeWithCanonical } from "@/components/storytelling/story-data"
 import {
   Card,
   CardHeader,
@@ -22,6 +26,7 @@ import {
   AlertCircle,
   Database,
   ExternalLink,
+  Sparkles,
 } from "lucide-react"
 
 export const dynamic = "force-dynamic"
@@ -50,8 +55,31 @@ async function getAnnouncements(): Promise<{
   }
 }
 
+async function getStoryChapters(): Promise<StoryChapter[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+      collection: "story-chapters",
+      where: {
+        _status: {
+          equals: "published",
+        },
+      },
+      sort: "order",
+      limit: 10,
+    })
+    return res.docs as StoryChapter[]
+  } catch {
+    return []
+  }
+}
+
 export default async function HomePage() {
-  const { announcements, dbError } = await getAnnouncements()
+  const [{ announcements, dbError }, cmsChapters] = await Promise.all([
+    getAnnouncements(),
+    getStoryChapters(),
+  ])
+  const acts = mergeWithCanonical(cmsChapters)
 
   return (
     <div className="flex flex-col">
@@ -95,19 +123,31 @@ export default async function HomePage() {
 
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3 pt-2">
             <Button asChild variant="terracotta" size="lg" className="w-full sm:w-auto font-semibold">
-              <a href="#announcements">
-                View Announcements
-                <ArrowRight className="ml-2 h-4 w-4" />
+              <a href="#cinematic-narrative">
+                <Sparkles className="mr-2 h-4 w-4" />
+                Experience 5-Act Narrative
               </a>
             </Button>
             <Button asChild variant="forest" size="lg" className="w-full sm:w-auto font-semibold">
-              <Link href="/admin">
-                Open CMS Admin
-              </Link>
+              <a href="#connect">
+                Service Times &amp; Connect
+              </a>
             </Button>
           </div>
         </div>
       </section>
+
+      {/* 🎬 The 5-Act Cinematic Narrative Blueprint */}
+      <section aria-label="Cinematic Ministry Narrative" className="w-full">
+        {/* Desktop Experience: Lenis Smooth Scroll + Pinned Sticky Stage (h-screen, h-[500vh] track) */}
+        <ScrollyStage acts={acts} />
+
+        {/* Mobile Experience: Zero Scroll-Jacking, CSS Vertical Cards & Native Momentum */}
+        <MobileStoryCards acts={acts} />
+      </section>
+
+      {/* Closing CTA: Seamless landing into service times, venue map, and connection portal */}
+      <ClosingPortal />
 
       {/* Ministry Pillars / About Preview */}
       <section id="about" className="border-t border-[#E2D9CC] bg-[#EFE8DC]/40 px-4 py-16 sm:px-6">

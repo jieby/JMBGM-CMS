@@ -71,6 +71,7 @@ export interface Config {
     media: Media;
     pages: Page;
     announcements: Announcement;
+    'story-chapters': StoryChapter;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -82,6 +83,7 @@ export interface Config {
     media: MediaSelect<false> | MediaSelect<true>;
     pages: PagesSelect<false> | PagesSelect<true>;
     announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
+    'story-chapters': StoryChaptersSelect<false> | StoryChaptersSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -269,6 +271,48 @@ export interface Announcement {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "story-chapters".
+ */
+export interface StoryChapter {
+  id: number;
+  /**
+   * Sequence order of the act (0 for Prologue, 1 for Evangelism, 2 for Discipleship, 3 for Leadership, 4 for Mission)
+   */
+  order: number;
+  /**
+   * Identifier key for the chapter act
+   */
+  chapterKey: 'prologue' | 'evangelism' | 'discipleship' | 'leadership' | 'mission';
+  /**
+   * Pillar label shown above headline (e.g. "Pillar I • Evangelism")
+   */
+  pillarName: string;
+  /**
+   * Main cinematic display headline
+   */
+  headline: string;
+  /**
+   * Theology / Theme narrative description
+   */
+  subheadline: string;
+  /**
+   * Anchor Scripture reference (e.g. "John 15:5")
+   */
+  scriptureRef: string;
+  /**
+   * Full verse text of the anchor scripture
+   */
+  scriptureText: string;
+  /**
+   * Background cinematic video loop or high-resolution visual frame
+   */
+  backgroundMedia?: (number | null) | Media;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -306,6 +350,10 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'announcements';
         value: number | Announcement;
+      } | null)
+    | ({
+        relationTo: 'story-chapters';
+        value: number | StoryChapter;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -453,6 +501,23 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   featured?: T;
   summary?: T;
   content?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "story-chapters_select".
+ */
+export interface StoryChaptersSelect<T extends boolean = true> {
+  order?: T;
+  chapterKey?: T;
+  pillarName?: T;
+  headline?: T;
+  subheadline?: T;
+  scriptureRef?: T;
+  scriptureText?: T;
+  backgroundMedia?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
