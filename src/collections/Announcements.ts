@@ -50,6 +50,15 @@ export const Announcements: CollectionConfig = {
       },
     },
     {
+      name: 'branch',
+      type: 'relationship',
+      relationTo: 'outreaches',
+      admin: {
+        description: 'Designate specific church branch (leave empty for All Campuses / Church-wide)',
+        position: 'sidebar',
+      },
+    },
+    {
       name: 'date',
       type: 'date',
       required: true,

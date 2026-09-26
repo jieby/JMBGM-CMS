@@ -249,6 +249,10 @@ export interface Announcement {
    */
   image?: (number | null) | Media;
   category: 'Announcement' | 'Sunday Service' | 'Event' | 'Ministry Update' | 'Community Outreach';
+  /**
+   * Designate specific church branch (leave empty for All Campuses / Church-wide)
+   */
+  branch?: (number | null) | Outreach;
   date: string;
   /**
    * Physical venue, sanctuary, or online streaming link
@@ -277,6 +281,73 @@ export interface Announcement {
     };
     [k: string]: unknown;
   } | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "outreaches".
+ */
+export interface Outreach {
+  id: number;
+  /**
+   * Official church campus / branch name (e.g. JMBGM - Metro Manila Main Sanctuary)
+   */
+  name: string;
+  /**
+   * URL-friendly unique identifier (e.g. metro-manila-main, cebu-campus)
+   */
+  slug: string;
+  branchType: 'Main Sanctuary' | 'Planted Campus' | 'Pioneering Outreach';
+  /**
+   * Lead Pastors / Campus Directors (e.g. Pastor David & Sarah Santos)
+   */
+  leadPastor: string;
+  /**
+   * Physical venue / street address
+   */
+  address: string;
+  /**
+   * City / Municipality (e.g. Quezon City, Cebu City, Davao City)
+   */
+  city: string;
+  country: string;
+  /**
+   * Geographic latitude coordinate for 3D globe (e.g. 14.5995)
+   */
+  latitude: number;
+  /**
+   * Geographic longitude coordinate for 3D globe (e.g. 120.9842)
+   */
+  longitude: number;
+  /**
+   * Weekly scheduled services and prayer gatherings at this campus
+   */
+  serviceTimes?:
+    | {
+        day: string;
+        time: string;
+        serviceName: string;
+        id?: string | null;
+      }[]
+    | null;
+  /**
+   * High-resolution photo of the campus sanctuary, congregation, or building
+   */
+  coverImage?: (number | null) | Media;
+  /**
+   * Campus helpline or pastoral office phone
+   */
+  contactPhone?: string | null;
+  /**
+   * Campus inquiry email
+   */
+  contactEmail?: string | null;
+  /**
+   * Highlight prominently in the Interactive 3D Globe directory
+   */
+  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -352,34 +423,6 @@ export interface Sermon {
    * Sermon summary, key takeaways, and reflection questions
    */
   summary?: string | null;
-  updatedAt: string;
-  createdAt: string;
-  _status?: ('draft' | 'published') | null;
-}
-/**
- * This interface was referenced by `Config`'s JSON-Schema
- * via the `definition` "outreaches".
- */
-export interface Outreach {
-  id: number;
-  title: string;
-  category: 'Food Pantry' | 'Community Care' | 'Prison Ministry' | 'Youth Outreach';
-  /**
-   * High-resolution outreach activity photo or banner
-   */
-  image: number | Media;
-  /**
-   * Details of the outreach initiative, impact, and beneficiaries
-   */
-  description: string;
-  /**
-   * Schedule for volunteers (e.g. Every 2nd & 4th Saturday, 8:00 AM)
-   */
-  volunteerSchedule?: string | null;
-  /**
-   * Pin to top of homepage outreaches section
-   */
-  featured?: boolean | null;
   updatedAt: string;
   createdAt: string;
   _status?: ('draft' | 'published') | null;
@@ -578,6 +621,7 @@ export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
   image?: T;
   category?: T;
+  branch?: T;
   date?: T;
   location?: T;
   featured?: T;
@@ -626,11 +670,26 @@ export interface SermonsSelect<T extends boolean = true> {
  * via the `definition` "outreaches_select".
  */
 export interface OutreachesSelect<T extends boolean = true> {
-  title?: T;
-  category?: T;
-  image?: T;
-  description?: T;
-  volunteerSchedule?: T;
+  name?: T;
+  slug?: T;
+  branchType?: T;
+  leadPastor?: T;
+  address?: T;
+  city?: T;
+  country?: T;
+  latitude?: T;
+  longitude?: T;
+  serviceTimes?:
+    | T
+    | {
+        day?: T;
+        time?: T;
+        serviceName?: T;
+        id?: T;
+      };
+  coverImage?: T;
+  contactPhone?: T;
+  contactEmail?: T;
   featured?: T;
   updatedAt?: T;
   createdAt?: T;

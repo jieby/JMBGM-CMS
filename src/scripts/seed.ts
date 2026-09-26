@@ -74,7 +74,139 @@ async function seed() {
     console.log('ℹ️ Pages collection already contains records.')
   }
 
-  // 3. Seed Announcements
+  // 3. Seed Church Branches (Planted Churches Network)
+  console.log('🏛️ Checking Outreaches / Planted Church Campuses...')
+  const existingBranches = await payload.find({
+    collection: 'outreaches',
+    limit: 1,
+  })
+
+  let manilaBranchId: string | number | undefined
+  let cebuBranchId: string | number | undefined
+  let davaoBranchId: string | number | undefined
+
+  if (existingBranches.totalDocs === 0) {
+    console.log('➕ Seeding 5 canonical church branches...')
+    const branches = [
+      {
+        name: 'JMBGM - Metro Manila Main Sanctuary',
+        slug: 'metro-manila-main',
+        branchType: 'Main Sanctuary',
+        leadPastor: 'Senior Pastor David & Sarah Santos',
+        address: '128 Epifanio de los Santos Ave, Quezon City',
+        city: 'Quezon City',
+        country: 'Philippines',
+        latitude: 14.5995,
+        longitude: 120.9842,
+        serviceTimes: [
+          { day: 'Sunday', time: '10:00 AM', serviceName: 'Main Worship & Word Celebration' },
+          { day: 'Wednesday', time: '7:00 PM', serviceName: 'Midweek Word & Corporate Prayer' },
+        ],
+        contactPhone: '+63 (02) 8123-4567',
+        contactEmail: 'manila@jmbgm.org',
+        featured: true,
+        _status: 'published',
+      },
+      {
+        name: 'JMBGM - Cebu City Campus',
+        slug: 'cebu-city-campus',
+        branchType: 'Planted Campus',
+        leadPastor: 'Pastor Joshua & Grace Mendoza',
+        address: 'Gorordo Ave, Cebu Business Park, Cebu City',
+        city: 'Cebu City',
+        country: 'Philippines',
+        latitude: 10.3157,
+        longitude: 123.8854,
+        serviceTimes: [
+          { day: 'Sunday', time: '9:30 AM', serviceName: 'Worship & Word Celebration' },
+          { day: 'Friday', time: '6:30 PM', serviceName: 'Visayas Prayer & Revival Gathering' },
+        ],
+        contactPhone: '+63 (32) 412-8890',
+        contactEmail: 'cebu@jmbgm.org',
+        featured: true,
+        _status: 'published',
+      },
+      {
+        name: 'JMBGM - Davao City Campus',
+        slug: 'davao-city-campus',
+        branchType: 'Planted Campus',
+        leadPastor: 'Pastor Emmanuel & Ruth Dela Cruz',
+        address: 'J.P. Laurel Ave, Bajada, Davao City',
+        city: 'Davao City',
+        country: 'Philippines',
+        latitude: 7.1907,
+        longitude: 125.4578,
+        serviceTimes: [
+          { day: 'Sunday', time: '10:00 AM', serviceName: 'Kingdom Harvest Celebration' },
+          { day: 'Thursday', time: '7:00 PM', serviceName: 'Mindanao Corporate Intercession' },
+        ],
+        contactPhone: '+63 (82) 298-7711',
+        contactEmail: 'davao@jmbgm.org',
+        featured: true,
+        _status: 'published',
+      },
+      {
+        name: 'JMBGM - Pampanga Campus',
+        slug: 'pampanga-campus',
+        branchType: 'Planted Campus',
+        leadPastor: 'Pastor Timothy & Faith Navarro',
+        address: 'MacArthur Highway, City of San Fernando, Pampanga',
+        city: 'San Fernando',
+        country: 'Philippines',
+        latitude: 15.0794,
+        longitude: 120.6200,
+        serviceTimes: [
+          { day: 'Sunday', time: '9:00 AM', serviceName: 'Sunday Morning Miracle Service' },
+          { day: 'Wednesday', time: '6:30 PM', serviceName: 'Luzon Apostolic Prayer Night' },
+        ],
+        contactPhone: '+63 (45) 961-3420',
+        contactEmail: 'pampanga@jmbgm.org',
+        featured: true,
+        _status: 'published',
+      },
+      {
+        name: 'JMBGM - Singapore International Outreach',
+        slug: 'singapore-international',
+        branchType: 'Pioneering Outreach',
+        leadPastor: 'Missionary Pastor Caleb & Joy Tan',
+        address: '10 Anson Road, International Plaza, Downtown',
+        city: 'Singapore',
+        country: 'Singapore',
+        latitude: 1.3521,
+        longitude: 103.8198,
+        serviceTimes: [
+          { day: 'Sunday', time: '3:00 PM', serviceName: 'International Diaspora Fellowship' },
+          { day: 'Saturday', time: '7:00 PM', serviceName: 'Apostolic Missions Discipleship' },
+        ],
+        contactPhone: '+65 6712 3456',
+        contactEmail: 'singapore@jmbgm.org',
+        featured: true,
+        _status: 'published',
+      },
+    ]
+
+    for (const branch of branches) {
+      const created = await payload.create({
+        collection: 'outreaches',
+        data: branch as any,
+      })
+      console.log(`  ✨ Created Church Branch: ${branch.name}`)
+      if (branch.slug === 'metro-manila-main') manilaBranchId = created.id
+      if (branch.slug === 'cebu-city-campus') cebuBranchId = created.id
+      if (branch.slug === 'davao-city-campus') davaoBranchId = created.id
+    }
+    console.log('✅ 5 canonical church branches seeded.')
+  } else {
+    console.log('ℹ️ Outreaches collection already contains branches.')
+    const all = await payload.find({ collection: 'outreaches', limit: 10 })
+    for (const b of all.docs as any[]) {
+      if (b.slug === 'metro-manila-main') manilaBranchId = b.id
+      if (b.slug === 'cebu-city-campus') cebuBranchId = b.id
+      if (b.slug === 'davao-city-campus') davaoBranchId = b.id
+    }
+  }
+
+  // 4. Seed Announcements (Tagged to branches)
   console.log('📢 Checking announcements...')
   const existingAnnouncements = await payload.find({
     collection: 'announcements',
@@ -82,7 +214,7 @@ async function seed() {
   })
 
   if (existingAnnouncements.totalDocs === 0) {
-    console.log('➕ Creating initial sample announcements...')
+    console.log('➕ Creating sample announcements with branch tags...')
     
     await payload.create({
       collection: 'announcements',
@@ -90,10 +222,11 @@ async function seed() {
         title: 'Sunday Miracle & Worship Celebration',
         category: 'Sunday Service',
         date: new Date(Date.now() + 2 * 24 * 60 * 60 * 1000).toISOString(),
-        location: 'Main Sanctuary & Online Livestream',
+        location: 'All Sanctuary Campuses & Global Livestream',
         featured: true,
+        branch: null, // All Campuses
         summary:
-          'Join us for our uplifting weekly Sunday celebration with worship, heartfelt prayer, and life-changing ministry of the Word. All are welcome!',
+          'Join us across all church branches for our weekly celebration with dynamic praise, heartfelt prayer, and life-changing ministry of the Word. All are welcome!',
         _status: 'published',
       },
     })
@@ -101,13 +234,14 @@ async function seed() {
     await payload.create({
       collection: 'announcements',
       data: {
-        title: 'Community Food Drive & Care Outreach',
-        category: 'Community Outreach',
-        date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString(),
-        location: 'JMBGM Community Outreach Center',
+        title: 'Metro Manila Youth & NextGen Elevation Gathering',
+        category: 'Event',
+        date: new Date(Date.now() + 5 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'Main Sanctuary, Metro Manila',
         featured: true,
+        branch: manilaBranchId as any,
         summary:
-          'Volunteers and donations are welcome as we distribute fresh groceries, care packages, and essential items to local families in need.',
+          'Empowering the rising generation of kingdom leaders, worshippers, and creatives. Food, worship, and inspiring youth breakout sessions.',
         _status: 'published',
       },
     })
@@ -115,13 +249,29 @@ async function seed() {
     await payload.create({
       collection: 'announcements',
       data: {
-        title: 'Midweek Word & Corporate Prayer Gathering',
+        title: 'Visayas Regional Leadership & Discipleship Summit',
         category: 'Ministry Update',
-        date: new Date(Date.now() + 4 * 24 * 60 * 60 * 1000).toISOString(),
-        location: 'Fellowship Hall & Zoom',
-        featured: false,
+        date: new Date(Date.now() + 8 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'Cebu City Campus & Online Stream',
+        featured: true,
+        branch: cebuBranchId as any,
         summary:
-          'Deep-dive into inductive scripture study, discipleship discussion, and corporate prayer every Wednesday evening at 7:00 PM.',
+          'Equipping church planters, cell leaders, and ministry coordinators across the Visayas region for spiritual expansion and community outreach.',
+        _status: 'published',
+      },
+    })
+
+    await payload.create({
+      collection: 'announcements',
+      data: {
+        title: 'Mindanao Apostolic Harvest & Prayer Vigil',
+        category: 'Sunday Service',
+        date: new Date(Date.now() + 11 * 24 * 60 * 60 * 1000).toISOString(),
+        location: 'Davao City Campus Sanctuary',
+        featured: false,
+        branch: davaoBranchId as any,
+        summary:
+          'Corporate intercession night focusing on peace, spiritual awakening, and pioneer church planting expeditions across Mindanao provinces.',
         _status: 'published',
       },
     })

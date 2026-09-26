@@ -5,31 +5,14 @@ import type { Announcement, StoryChapter, Sermon, Outreach, SiteSetting, Media }
 import { ScrollyStage } from "@/components/storytelling/ScrollyStage"
 import { MobileStoryCards } from "@/components/storytelling/MobileStoryCards"
 import { ClosingPortal } from "@/components/storytelling/ClosingPortal"
+import { OutreachesGlobeSection, type ChurchBranch } from "@/components/outreaches/OutreachesGlobeSection"
+import { EventFilterGrid, type EventItem } from "@/components/events/EventFilterGrid"
+import { ApostolicMissionSection } from "@/components/mission/ApostolicMissionSection"
 import { PrayerGivingSection } from "@/components/giving/PrayerGivingSection"
 import { mergeWithCanonical } from "@/components/storytelling/story-data"
-import {
-  Card,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-  CardContent,
-  CardFooter,
-} from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
 import { Button } from "@/components/ui/button"
-import {
-  Calendar,
-  MapPin,
-  ArrowRight,
-  BookOpen,
-  Users as UsersIcon,
-  Compass,
-  Play,
-  Heart,
-  Globe2,
-  Clock,
-  Sparkles,
-} from "lucide-react"
+import { Play, ArrowRight, Heart } from "lucide-react"
 
 export const dynamic = "force-dynamic"
 
@@ -63,7 +46,7 @@ async function getAnnouncements(): Promise<Announcement[]> {
         },
       },
       sort: "-date",
-      limit: 6,
+      limit: 12,
     })
     return res.docs as Announcement[]
   } catch {
@@ -100,7 +83,7 @@ async function getOutreaches(): Promise<Outreach[]> {
           equals: "published",
         },
       },
-      limit: 4,
+      limit: 20,
     })
     return res.docs as Outreach[]
   } catch {
@@ -127,34 +110,107 @@ async function getStoryChapters(): Promise<StoryChapter[]> {
   }
 }
 
-// Fallback Outreaches for warm community experience
-const FALLBACK_OUTREACHES = [
+// 5 Canonical Planted Church Network Branches as resilient baseline
+const CANONICAL_BRANCHES: ChurchBranch[] = [
   {
-    id: "outreach-1",
-    title: "Compassion Food Pantry & Family Care",
-    category: "Food Pantry",
-    volunteerSchedule: "Every 2nd & 4th Saturday • 8:00 AM",
-    description:
-      "Providing fresh groceries, warm meals, and family blessing bags to vulnerable households across our local community.",
-    imageUrl: "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80",
+    id: "metro-manila-main",
+    name: "JMBGM - Metro Manila Main Sanctuary",
+    slug: "metro-manila-main",
+    branchType: "Main Sanctuary",
+    leadPastor: "Senior Pastor David & Sarah Santos",
+    address: "128 Epifanio de los Santos Ave, Quezon City",
+    city: "Quezon City",
+    country: "Philippines",
+    latitude: 14.5995,
+    longitude: 120.9842,
+    serviceTimes: [
+      { day: "Sunday", time: "10:00 AM", serviceName: "Main Worship & Word Celebration" },
+      { day: "Wednesday", time: "7:00 PM", serviceName: "Midweek Word & Corporate Prayer" },
+    ],
+    contactPhone: "+63 (02) 8123-4567",
+    contactEmail: "manila@jmbgm.org",
+    coverImageUrl: "https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=800&q=80",
+    featured: true,
   },
   {
-    id: "outreach-2",
-    title: "Youth Elevation & Street Discipleship",
-    category: "Youth Outreach",
-    volunteerSchedule: "Every Saturday • 2:00 PM",
-    description:
-      "Mentoring and inspiring at-risk youth through creative arts, athletics, educational tutoring, and the message of Christ's love.",
-    imageUrl: "https://images.unsplash.com/photo-1529156069898-49953e39b3ac?auto=format&fit=crop&w=800&q=80",
+    id: "cebu-city-campus",
+    name: "JMBGM - Cebu City Campus",
+    slug: "cebu-city-campus",
+    branchType: "Planted Campus",
+    leadPastor: "Pastor Joshua & Grace Mendoza",
+    address: "Gorordo Ave, Cebu Business Park, Cebu City",
+    city: "Cebu City",
+    country: "Philippines",
+    latitude: 10.3157,
+    longitude: 123.8854,
+    serviceTimes: [
+      { day: "Sunday", time: "9:30 AM", serviceName: "Worship & Word Celebration" },
+      { day: "Friday", time: "6:30 PM", serviceName: "Visayas Prayer & Revival Gathering" },
+    ],
+    contactPhone: "+63 (32) 412-8890",
+    contactEmail: "cebu@jmbgm.org",
+    coverImageUrl: "https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80",
+    featured: true,
   },
   {
-    id: "outreach-3",
-    title: "Senior Citizens & Hospital Visitation Care",
-    category: "Community Care",
-    volunteerSchedule: "Weekly Thursdays • 10:00 AM",
-    description:
-      "Bringing presence, prayers of healing, and thoughtful companionship to elderly residents and patients in convalescent centers.",
-    imageUrl: "https://images.unsplash.com/photo-1576765608535-5f04d1e3f289?auto=format&fit=crop&w=800&q=80",
+    id: "davao-city-campus",
+    name: "JMBGM - Davao City Campus",
+    slug: "davao-city-campus",
+    branchType: "Planted Campus",
+    leadPastor: "Pastor Emmanuel & Ruth Dela Cruz",
+    address: "J.P. Laurel Ave, Bajada, Davao City",
+    city: "Davao City",
+    country: "Philippines",
+    latitude: 7.1907,
+    longitude: 125.4578,
+    serviceTimes: [
+      { day: "Sunday", time: "10:00 AM", serviceName: "Kingdom Harvest Celebration" },
+      { day: "Thursday", time: "7:00 PM", serviceName: "Mindanao Corporate Intercession" },
+    ],
+    contactPhone: "+63 (82) 298-7711",
+    contactEmail: "davao@jmbgm.org",
+    coverImageUrl: "https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=800&q=80",
+    featured: true,
+  },
+  {
+    id: "pampanga-campus",
+    name: "JMBGM - Pampanga Campus",
+    slug: "pampanga-campus",
+    branchType: "Planted Campus",
+    leadPastor: "Pastor Timothy & Faith Navarro",
+    address: "MacArthur Highway, City of San Fernando, Pampanga",
+    city: "San Fernando",
+    country: "Philippines",
+    latitude: 15.0794,
+    longitude: 120.6200,
+    serviceTimes: [
+      { day: "Sunday", time: "9:00 AM", serviceName: "Sunday Morning Miracle Service" },
+      { day: "Wednesday", time: "6:30 PM", serviceName: "Luzon Apostolic Prayer Night" },
+    ],
+    contactPhone: "+63 (45) 961-3420",
+    contactEmail: "pampanga@jmbgm.org",
+    coverImageUrl: "https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=800&q=80",
+    featured: true,
+  },
+  {
+    id: "singapore-international",
+    name: "JMBGM - Singapore International Outreach",
+    slug: "singapore-international",
+    branchType: "Pioneering Outreach",
+    leadPastor: "Missionary Pastor Caleb & Joy Tan",
+    address: "10 Anson Road, International Plaza, Downtown",
+    city: "Singapore",
+    country: "Singapore",
+    latitude: 1.3521,
+    longitude: 103.8198,
+    serviceTimes: [
+      { day: "Sunday", time: "3:00 PM", serviceName: "International Diaspora Fellowship" },
+      { day: "Saturday", time: "7:00 PM", serviceName: "Apostolic Missions Discipleship" },
+    ],
+    contactPhone: "+65 6712 3456",
+    contactEmail: "singapore@jmbgm.org",
+    coverImageUrl: "https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80",
+    featured: true,
   },
 ]
 
@@ -163,7 +219,7 @@ const FALLBACK_SERMONS = [
   {
     id: "sermon-1",
     title: "The Sovereign Architect: Walking in Divine Order",
-    speaker: "Senior Pastor",
+    speaker: "Senior Pastor David Santos",
     date: "2026-09-20",
     scripture: "Hebrews 3:4",
     series: "The Master Builder Series",
@@ -174,7 +230,7 @@ const FALLBACK_SERMONS = [
   {
     id: "sermon-2",
     title: "Rooted in Good Soil: Deep Discipleship",
-    speaker: "Associate Pastor",
+    speaker: "Associate Pastor Joshua Mendoza",
     date: "2026-09-13",
     scripture: "Matthew 13:8 & Colossians 2:7",
     series: "Sacred Foundations",
@@ -211,20 +267,61 @@ export default async function HomePage() {
     getMediaUrl(siteSettings?.missionHeroImage) ||
     "https://images.unsplash.com/photo-1526778548025-fa2f459cd5c1?auto=format&fit=crop&w=1600&q=80"
 
-  // Active outreaches (CMS or Fallback)
-  const activeOutreaches =
+  // Processed Branches (from Payload CMS Outreaches or Canonical Fallback)
+  const activeBranches: ChurchBranch[] =
     outreaches.length > 0
       ? outreaches.map((o) => ({
           id: o.id,
-          title: o.title,
-          category: o.category,
-          volunteerSchedule: o.volunteerSchedule || "Weekly Gatherings",
-          description: o.description,
-          imageUrl:
-            getMediaUrl(o.image) ||
-            "https://images.unsplash.com/photo-1593113598332-cd288d649433?auto=format&fit=crop&w=800&q=80",
+          name: o.name,
+          slug: o.slug,
+          branchType: (o.branchType as 'Main Sanctuary' | 'Planted Campus' | 'Pioneering Outreach') || 'Planted Campus',
+          leadPastor: o.leadPastor,
+          address: o.address,
+          city: o.city,
+          country: o.country || 'Philippines',
+          latitude: typeof o.latitude === 'number' ? o.latitude : 14.5995,
+          longitude: typeof o.longitude === 'number' ? o.longitude : 120.9842,
+          serviceTimes: o.serviceTimes?.map((st) => ({
+            day: st.day,
+            time: st.time,
+            serviceName: st.serviceName,
+          })),
+          coverImageUrl: getMediaUrl(o.coverImage),
+          contactPhone: o.contactPhone,
+          contactEmail: o.contactEmail,
+          featured: o.featured ?? true,
         }))
-      : FALLBACK_OUTREACHES
+      : CANONICAL_BRANCHES
+
+  // Processed Events (from Announcements with Branch Resolution)
+  const activeEvents: EventItem[] = announcements.map((item) => {
+    let branchId: string | number | null = null
+    let branchName: string | null = null
+
+    if (item.branch) {
+      if (typeof item.branch === 'object' && 'name' in item.branch) {
+        branchId = (item.branch as any).id
+        branchName = (item.branch as any).name
+      } else {
+        branchId = item.branch as any
+        const matched = activeBranches.find((b) => String(b.id) === String(branchId))
+        if (matched) branchName = matched.city + ' Campus'
+      }
+    }
+
+    return {
+      id: item.id,
+      title: item.title,
+      category: item.category,
+      date: item.date,
+      location: item.location,
+      summary: item.summary,
+      featured: item.featured ?? false,
+      imageUrl: getMediaUrl(item.image),
+      branchId,
+      branchName,
+    }
+  })
 
   // Active sermons (CMS or Fallback)
   const activeSermons =
@@ -247,187 +344,40 @@ export default async function HomePage() {
     <div className="flex flex-col">
       {/* 1. 🎬 Hero: The 5-Act Cinematic Narrative (#cinematic-narrative) */}
       <section id="cinematic-narrative" aria-label="Cinematic Ministry Narrative" className="w-full">
-        {/* Desktop Experience: Lenis Smooth Scroll + Pinned Sticky Stage (h-screen, h-[500vh] track) */}
         <ScrollyStage acts={acts} />
-
-        {/* Mobile Experience: Zero Scroll-Jacking, CSS Vertical Cards & Native Momentum */}
         <MobileStoryCards acts={acts} />
       </section>
 
       {/* 2. 🏛️ Connect & Gatherings (#connect) */}
       <ClosingPortal />
 
-      {/* 3. 🤝 Community Outreaches (#outreaches) */}
-      <section id="outreaches" className="border-t border-[#E2D9CC] bg-[#FBF6EE] px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-12">
-          <div className="flex flex-col sm:flex-row sm:items-end justify-between gap-4">
-            <div className="space-y-2">
-              <Badge variant="sage" className="text-xs uppercase tracking-wider">
-                Hands &amp; Feet of Christ
-              </Badge>
-              <h2 className="text-3xl font-extrabold tracking-tight text-[#2F3E33] sm:text-4xl">
-                Community Outreaches
-              </h2>
-              <p className="text-sm text-[#5C6F62] max-w-xl leading-relaxed">
-                Demonstrating God&apos;s compassion beyond sanctuary walls. We serve local families, shelter communities, and youths in need.
-              </p>
-            </div>
-            <Button asChild variant="terracotta" size="sm" className="self-start sm:self-auto font-semibold">
-              <a href="#give">
-                Join a Serve Team
-                <ArrowRight className="ml-1 h-3.5 w-3.5" />
-              </a>
-            </Button>
-          </div>
+      {/* 3. 🌐 Outreaches as Planted Church Network (Interactive 3D Globe) (#outreaches) */}
+      <OutreachesGlobeSection branches={activeBranches} />
 
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-            {activeOutreaches.map((outreach) => (
-              <Card
-                key={outreach.id}
-                className="overflow-hidden border-[#E2D9CC] bg-white shadow-md flex flex-col justify-between hover:shadow-lg transition-shadow"
-              >
-                <div>
-                  <div className="relative h-48 w-full overflow-hidden bg-[#2F3E33]">
-                    {/* eslint-disable-next-line @next/next/no-img-element */}
-                    <img
-                      src={outreach.imageUrl}
-                      alt={outreach.title}
-                      className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                    />
-                    <div className="absolute top-3 left-3">
-                      <Badge variant="secondary" className="bg-[#2F3E33]/90 text-white font-medium text-xs backdrop-blur-sm">
-                        {outreach.category}
-                      </Badge>
-                    </div>
-                  </div>
-                  <CardHeader className="space-y-2 pb-2">
-                    <CardTitle className="text-xl text-[#2F3E33] leading-snug">
-                      {outreach.title}
-                    </CardTitle>
-                    <div className="flex items-center gap-1.5 text-xs text-[#C1683B] font-medium">
-                      <Clock className="h-3.5 w-3.5" />
-                      <span>{outreach.volunteerSchedule}</span>
-                    </div>
-                  </CardHeader>
-                  <CardContent>
-                    <p className="text-sm text-[#5C6F62] leading-relaxed line-clamp-3">
-                      {outreach.description}
-                    </p>
-                  </CardContent>
-                </div>
-                <CardFooter className="pt-0">
-                  <Button asChild variant="outline" size="sm" className="w-full border-[#E2D9CC] text-[#2F3E33] hover:bg-[#EFE8DC]/60">
-                    <a href="#give">
-                      Support this Initiative
-                      <Heart className="ml-1.5 h-3.5 w-3.5 text-[#C1683B]" />
-                    </a>
-                  </Button>
-                </CardFooter>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* 4. 📢 Announcements & Events (#events) */}
+      {/* 4. 📢 Branch-Tagged & Filterable Calendar (#events) */}
       <section id="events" className="border-t border-[#E2D9CC] bg-[#EFE8DC]/30 px-4 py-20 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-6xl space-y-12">
           <div className="text-center space-y-3">
             <Badge variant="terracotta" className="text-xs uppercase tracking-wider px-3 py-1">
-              Church Calendar
+              Multi-Campus Calendar
             </Badge>
             <h2 className="text-3xl font-extrabold tracking-tight text-[#2F3E33] sm:text-4xl">
-              Announcements &amp; Gatherings
+              Announcements &amp; Campus Gatherings
             </h2>
             <p className="text-sm text-[#5C6F62] max-w-xl mx-auto leading-relaxed">
-              Stay connected with upcoming worship celebrations, corporate prayer gatherings, and community events.
+              Explore church-wide celebrations and campus-specific gatherings across our planted branches.
             </p>
           </div>
 
-          {announcements.length === 0 ? (
-            <div className="rounded-2xl border border-dashed border-[#E2D9CC] bg-white/70 p-10 text-center max-w-xl mx-auto space-y-4 shadow-sm">
-              <Calendar className="mx-auto h-10 w-10 text-[#8A9A5B]" />
-              <h3 className="text-lg font-bold text-[#2F3E33]">
-                Upcoming Gatherings
-              </h3>
-              <p className="text-sm text-[#5C6F62] leading-relaxed">
-                We are preparing upcoming gatherings and seasonal events. Join us this Sunday for worship, or check back soon for updates.
-              </p>
-              <Button asChild variant="outline" size="sm" className="border-[#C1683B] text-[#C1683B]">
-                <a href="#connect">View Sunday Service Times</a>
-              </Button>
-            </div>
-          ) : (
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2 lg:grid-cols-3">
-              {announcements.map((item) => {
-                const imageUrl = getMediaUrl(item.image)
-                return (
-                  <Card
-                    key={item.id}
-                    className={`flex flex-col justify-between border-[#E2D9CC] bg-white overflow-hidden shadow-sm hover:shadow-md transition-shadow ${
-                      item.featured ? "ring-2 ring-[#C1683B]" : ""
-                    }`}
-                  >
-                    {imageUrl && (
-                      <div className="relative h-44 w-full bg-[#16221A] overflow-hidden">
-                        {/* eslint-disable-next-line @next/next/no-img-element */}
-                        <img
-                          src={imageUrl}
-                          alt={item.title}
-                          className="h-full w-full object-cover transition-transform duration-500 hover:scale-105"
-                        />
-                      </div>
-                    )}
-                    <CardHeader className="space-y-3">
-                      <div className="flex items-center justify-between gap-2">
-                        <Badge variant="sage">{item.category}</Badge>
-                        {item.featured && (
-                          <Badge variant="terracotta" className="text-[10px]">
-                            Featured
-                          </Badge>
-                        )}
-                      </div>
-                      <CardTitle className="text-xl line-clamp-2 text-[#2F3E33]">
-                        {item.title}
-                      </CardTitle>
-                      <div className="flex flex-col gap-1 text-xs text-[#5C6F62]">
-                        {item.date && (
-                          <span className="flex items-center gap-1.5">
-                            <Calendar className="h-3.5 w-3.5 text-[#C1683B]" />
-                            {new Date(item.date).toLocaleDateString(undefined, {
-                              weekday: "short",
-                              year: "numeric",
-                              month: "short",
-                              day: "numeric",
-                            })}
-                          </span>
-                        )}
-                        {item.location && (
-                          <span className="flex items-center gap-1.5">
-                            <MapPin className="h-3.5 w-3.5 text-[#8A9A5B]" />
-                            {item.location}
-                          </span>
-                        )}
-                      </div>
-                    </CardHeader>
-                    <CardContent>
-                      <p className="text-sm text-[#5C6F62] leading-relaxed line-clamp-3">
-                        {item.summary}
-                      </p>
-                    </CardContent>
-                    <CardFooter className="pt-0">
-                      <Button asChild variant="ghost" size="sm" className="text-xs text-[#C1683B] hover:text-[#C1683B]/80 hover:bg-[#EFE8DC]/50 p-0 h-auto font-semibold">
-                        <a href="#connect">
-                          Join Gathering Details
-                          <ArrowRight className="ml-1 h-3 w-3" />
-                        </a>
-                      </Button>
-                    </CardFooter>
-                  </Card>
-                )
-              })}
-            </div>
-          )}
+          <EventFilterGrid
+            events={activeEvents}
+            branches={activeBranches.map((b) => ({
+              id: b.id,
+              name: b.name,
+              city: b.city,
+              slug: b.slug,
+            }))}
+          />
         </div>
       </section>
 
@@ -446,10 +396,10 @@ export default async function HomePage() {
                 Be fed spiritually through anointed biblical preaching, inductive verse-by-verse teachings, and worship livestreams.
               </p>
             </div>
-            <Button asChild variant="terracotta" size="sm" className="self-start sm:self-auto font-semibold">
+            <Button asChild variant="terracotta" size="sm" className="self-start sm:self-auto font-semibold shadow-md">
               <a href="#media">
                 Watch Livestream
-                <Play className="ml-1.5 h-3.5 w-3.5" />
+                <Play className="ml-1.5 h-3.5 w-3.5 fill-white" />
               </a>
             </Button>
           </div>
@@ -508,55 +458,8 @@ export default async function HomePage() {
         </div>
       </section>
 
-      {/* 6. 🌍 Global Mission & Church Planting (#mission) */}
-      <section id="mission" className="border-t border-[#E2D9CC] bg-[#EFE8DC]/50 px-4 py-20 sm:px-6 lg:px-8">
-        <div className="mx-auto max-w-6xl space-y-12">
-          <div className="relative rounded-3xl overflow-hidden border border-[#E2D9CC] bg-[#2F3E33] text-white shadow-2xl">
-            {/* Background Feature Image with gradient overlays */}
-            <div className="absolute inset-0 z-0">
-              {/* eslint-disable-next-line @next/next/no-img-element */}
-              <img
-                src={missionHeroImageUrl}
-                alt="Global Mission and Church Planting"
-                className="h-full w-full object-cover opacity-25"
-              />
-              <div className="absolute inset-0 bg-gradient-to-r from-[#2F3E33] via-[#2F3E33]/90 to-[#2F3E33]/60" />
-            </div>
-
-            <div className="relative z-10 p-8 sm:p-12 lg:p-16 max-w-2xl space-y-6">
-              <Badge variant="terracotta" className="text-xs uppercase tracking-widest px-3 py-1">
-                The Great Commission
-              </Badge>
-              <h2 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-white leading-tight">
-                Sent to All the Nations
-              </h2>
-              <blockquote className="rounded-xl border-l-4 border-[#C1683B] bg-white/10 p-4 font-serif italic text-base sm:text-lg text-[#FBF6EE]">
-                &ldquo;Go therefore and make disciples of all the nations, baptizing them in the name of the Father and of the Son and of the Holy Spirit.&rdquo;
-                <footer className="mt-2 text-xs font-mono font-semibold tracking-wider text-[#E3A857] not-italic">
-                  — Matthew 28:19
-                </footer>
-              </blockquote>
-              <p className="text-sm sm:text-base text-[#E2D9CC] leading-relaxed">
-                As the Holy Fire illuminates the path, JMBGM is committed to establishing vibrant local churches,
-                training apostolic servant leaders, and planting kingdom disciples across urban centers and rural territories.
-              </p>
-              <div className="flex flex-col sm:flex-row gap-3 pt-2">
-                <Button asChild variant="terracotta" size="lg" className="font-semibold shadow-md">
-                  <a href="#give">
-                    Partner with Global Missions
-                    <Globe2 className="ml-2 h-4 w-4" />
-                  </a>
-                </Button>
-                <Button asChild variant="outline-white" size="lg">
-                  <a href="#connect">
-                    View Sanctuary Locations
-                  </a>
-                </Button>
-              </div>
-            </div>
-          </div>
-        </div>
-      </section>
+      {/* 6. 🌍 Redesigned Apostolic Mission & Church Planting Hub (#mission) */}
+      <ApostolicMissionSection missionHeroImageUrl={missionHeroImageUrl} />
 
       {/* 7. 🎁 Generosity, Prayer & Kingdom Giving (#give) */}
       <PrayerGivingSection

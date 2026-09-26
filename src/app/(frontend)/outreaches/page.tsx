@@ -1,127 +1,200 @@
 import Link from 'next/link'
-import { Badge } from '@/components/ui/badge'
+import { getPayload } from 'payload'
+import config from '@payload-config'
+import type { Outreach, Media } from '@/payload-types'
+import { OutreachesGlobeSection, type ChurchBranch } from '@/components/outreaches/OutreachesGlobeSection'
 import { Button } from '@/components/ui/button'
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
-import { Heart, ArrowLeft, ArrowRight, Clock, Users, Sparkles } from 'lucide-react'
+import { ArrowLeft, Heart, Compass } from 'lucide-react'
+
+export const dynamic = 'force-dynamic'
 
 export const metadata = {
-  title: 'Community Outreaches | JMBGM',
-  description: 'Hands and feet of Jesus: community food pantries, family care, and youth street mentorship.',
+  title: 'Planted Churches & Global Campuses | JMBGM',
+  description: 'Explore the apostolic church network of Jesus the Master Builder Global Ministry across cities and nations.',
 }
 
-export default function OutreachesPage() {
+function getMediaUrl(media: string | number | Media | null | undefined): string | null {
+  if (!media) return null
+  if (typeof media === 'string') return media
+  if (typeof media === 'object' && 'url' in media && typeof media.url === 'string') return media.url
+  return null
+}
+
+async function getOutreaches(): Promise<Outreach[]> {
+  try {
+    const payload = await getPayload({ config })
+    const res = await payload.find({
+      collection: 'outreaches',
+      where: {
+        _status: {
+          equals: 'published',
+        },
+      },
+      limit: 50,
+    })
+    return res.docs as Outreach[]
+  } catch {
+    return []
+  }
+}
+
+// Canonical fallback church branches
+const CANONICAL_BRANCHES: ChurchBranch[] = [
+  {
+    id: 'metro-manila-main',
+    name: 'JMBGM - Metro Manila Main Sanctuary',
+    slug: 'metro-manila-main',
+    branchType: 'Main Sanctuary',
+    leadPastor: 'Senior Pastor David & Sarah Santos',
+    address: '128 Epifanio de los Santos Ave, Quezon City',
+    city: 'Quezon City',
+    country: 'Philippines',
+    latitude: 14.5995,
+    longitude: 120.9842,
+    serviceTimes: [
+      { day: 'Sunday', time: '10:00 AM', serviceName: 'Main Worship & Word Celebration' },
+      { day: 'Wednesday', time: '7:00 PM', serviceName: 'Midweek Word & Corporate Prayer' },
+    ],
+    contactPhone: '+63 (02) 8123-4567',
+    contactEmail: 'manila@jmbgm.org',
+    coverImageUrl: 'https://images.unsplash.com/photo-1543807535-eceef0bc6599?auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+  {
+    id: 'cebu-city-campus',
+    name: 'JMBGM - Cebu City Campus',
+    slug: 'cebu-city-campus',
+    branchType: 'Planted Campus',
+    leadPastor: 'Pastor Joshua & Grace Mendoza',
+    address: 'Gorordo Ave, Cebu Business Park, Cebu City',
+    city: 'Cebu City',
+    country: 'Philippines',
+    latitude: 10.3157,
+    longitude: 123.8854,
+    serviceTimes: [
+      { day: 'Sunday', time: '9:30 AM', serviceName: 'Worship & Word Celebration' },
+      { day: 'Friday', time: '6:30 PM', serviceName: 'Visayas Prayer & Revival Gathering' },
+    ],
+    contactPhone: '+63 (32) 412-8890',
+    contactEmail: 'cebu@jmbgm.org',
+    coverImageUrl: 'https://images.unsplash.com/photo-1519817650390-64a93db51149?auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+  {
+    id: 'davao-city-campus',
+    name: 'JMBGM - Davao City Campus',
+    slug: 'davao-city-campus',
+    branchType: 'Planted Campus',
+    leadPastor: 'Pastor Emmanuel & Ruth Dela Cruz',
+    address: 'J.P. Laurel Ave, Bajada, Davao City',
+    city: 'Davao City',
+    country: 'Philippines',
+    latitude: 7.1907,
+    longitude: 125.4578,
+    serviceTimes: [
+      { day: 'Sunday', time: '10:00 AM', serviceName: 'Kingdom Harvest Celebration' },
+      { day: 'Thursday', time: '7:00 PM', serviceName: 'Mindanao Corporate Intercession' },
+    ],
+    contactPhone: '+63 (82) 298-7711',
+    contactEmail: 'davao@jmbgm.org',
+    coverImageUrl: 'https://images.unsplash.com/photo-1438032005730-c779502df39b?auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+  {
+    id: 'pampanga-campus',
+    name: 'JMBGM - Pampanga Campus',
+    slug: 'pampanga-campus',
+    branchType: 'Planted Campus',
+    leadPastor: 'Pastor Timothy & Faith Navarro',
+    address: 'MacArthur Highway, City of San Fernando, Pampanga',
+    city: 'San Fernando',
+    country: 'Philippines',
+    latitude: 15.0794,
+    longitude: 120.6200,
+    serviceTimes: [
+      { day: 'Sunday', time: '9:00 AM', serviceName: 'Sunday Morning Miracle Service' },
+      { day: 'Wednesday', time: '6:30 PM', serviceName: 'Luzon Apostolic Prayer Night' },
+    ],
+    contactPhone: '+63 (45) 961-3420',
+    contactEmail: 'pampanga@jmbgm.org',
+    coverImageUrl: 'https://images.unsplash.com/photo-1507692049790-de58290a4334?auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+  {
+    id: 'singapore-international',
+    name: 'JMBGM - Singapore International Outreach',
+    slug: 'singapore-international',
+    branchType: 'Pioneering Outreach',
+    leadPastor: 'Missionary Pastor Caleb & Joy Tan',
+    address: '10 Anson Road, International Plaza, Downtown',
+    city: 'Singapore',
+    country: 'Singapore',
+    latitude: 1.3521,
+    longitude: 103.8198,
+    serviceTimes: [
+      { day: 'Sunday', time: '3:00 PM', serviceName: 'International Diaspora Fellowship' },
+      { day: 'Saturday', time: '7:00 PM', serviceName: 'Apostolic Missions Discipleship' },
+    ],
+    contactPhone: '+65 6712 3456',
+    contactEmail: 'singapore@jmbgm.org',
+    coverImageUrl: 'https://images.unsplash.com/photo-1506973035872-a4ec16b8e8d9?auto=format&fit=crop&w=800&q=80',
+    featured: true,
+  },
+]
+
+export default async function OutreachesPage() {
+  const outreaches = await getOutreaches()
+
+  const branches: ChurchBranch[] =
+    outreaches.length > 0
+      ? outreaches.map((o) => ({
+          id: o.id,
+          name: o.name,
+          slug: o.slug,
+          branchType:
+            (o.branchType as 'Main Sanctuary' | 'Planted Campus' | 'Pioneering Outreach') ||
+            'Planted Campus',
+          leadPastor: o.leadPastor,
+          address: o.address,
+          city: o.city,
+          country: o.country || 'Philippines',
+          latitude: typeof o.latitude === 'number' ? o.latitude : 14.5995,
+          longitude: typeof o.longitude === 'number' ? o.longitude : 120.9842,
+          serviceTimes: o.serviceTimes?.map((st) => ({
+            day: st.day,
+            time: st.time,
+            serviceName: st.serviceName,
+          })),
+          coverImageUrl: getMediaUrl(o.coverImage),
+          contactPhone: o.contactPhone,
+          contactEmail: o.contactEmail,
+          featured: o.featured ?? true,
+        }))
+      : CANONICAL_BRANCHES
+
   return (
-    <div className="mx-auto max-w-5xl px-4 py-12 sm:px-6 lg:px-8 space-y-12">
-      {/* Breadcrumb */}
-      <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs text-[#5C6F62]">
-        <Link href="/" className="hover:text-[#C1683B] transition-colors">Home</Link>
-        <span>/</span>
-        <span className="font-semibold text-[#2F3E33]">Outreaches</span>
-      </nav>
-
-      {/* Hero Header */}
-      <div className="space-y-4 text-center max-w-3xl mx-auto">
-        <Badge variant="sage" className="text-xs uppercase tracking-widest px-3 py-1">
-          Compassion in Action
-        </Badge>
-        <h1 className="text-3xl sm:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#2F3E33]">
-          Community Outreaches &amp; Care
-        </h1>
-        <p className="text-base text-[#5C6F62] leading-relaxed">
-          The heart of Jesus the Master Builder is reflected in extending hope, nutrition, educational empowerment,
-          and pastoral presence to families and underserved neighborhoods.
-        </p>
+    <div className="space-y-8">
+      {/* Top Breadcrumb Bar */}
+      <div className="mx-auto max-w-6xl px-4 pt-8 sm:px-6 lg:px-8">
+        <nav aria-label="Breadcrumb" className="flex items-center justify-between text-xs text-[#5C6F62]">
+          <div className="flex items-center gap-2">
+            <Link href="/" className="hover:text-[#C1683B] transition-colors">
+              Home
+            </Link>
+            <span>/</span>
+            <span className="font-semibold text-[#2F3E33]">Planted Churches Network</span>
+          </div>
+          <Button asChild variant="ghost" size="sm" className="h-7 text-xs text-[#5C6F62] hover:text-[#2F3E33]">
+            <Link href="/#cinematic-narrative" className="gap-1.5">
+              <ArrowLeft className="h-3 w-3" />
+              Return to Homepage
+            </Link>
+          </Button>
+        </nav>
       </div>
 
-      {/* Initiatives Grid */}
-      <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-        <Card className="border-[#E2D9CC] bg-white shadow-md flex flex-col justify-between">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#2F3E33] text-[#FBF6EE] mb-2">
-              <Heart className="h-5 w-5 text-[#C1683B]" />
-            </div>
-            <CardTitle className="text-xl text-[#2F3E33]">Food Pantry &amp; Relief</CardTitle>
-            <CardDescription className="text-[#5C6F62]">
-              Distributing wholesome food staples, hygiene kits, and hot meals to vulnerable families.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#C1683B]">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Every 2nd &amp; 4th Saturday</span>
-            </div>
-            <p className="text-xs text-[#5C6F62]">
-              Over 500 households blessed each month through kingdom partnership.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-[#E2D9CC] bg-white shadow-md flex flex-col justify-between">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#C1683B] text-white mb-2">
-              <Users className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-xl text-[#2F3E33]">Youth Street Discipleship</CardTitle>
-            <CardDescription className="text-[#5C6F62]">
-              Mentoring street youth and local school students through leadership and creative arts.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#8A9A5B]">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Weekly Saturdays • 2:00 PM</span>
-            </div>
-            <p className="text-xs text-[#5C6F62]">
-              Providing safe spaces for discipleship, athletic training, and academic tutoring.
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card className="border-[#E2D9CC] bg-white shadow-md flex flex-col justify-between">
-          <CardHeader>
-            <div className="flex h-10 w-10 items-center justify-center rounded-lg bg-[#8A9A5B] text-white mb-2">
-              <Sparkles className="h-5 w-5" />
-            </div>
-            <CardTitle className="text-xl text-[#2F3E33]">Hospital &amp; Care Centers</CardTitle>
-            <CardDescription className="text-[#5C6F62]">
-              Compassionate visitation, pastoral prayer, and essential care packages for patients.
-            </CardDescription>
-          </CardHeader>
-          <CardContent className="space-y-3">
-            <div className="flex items-center gap-2 text-xs font-mono text-[#5C6F62]">
-              <Clock className="h-3.5 w-3.5" />
-              <span>Weekly Thursdays</span>
-            </div>
-            <p className="text-xs text-[#5C6F62]">
-              Bringing the peace, comfort, and restorative hope of Christ to hospital wards.
-            </p>
-          </CardContent>
-        </Card>
-      </div>
-
-      {/* Volunteer CTA */}
-      <div className="rounded-2xl border border-[#8A9A5B]/30 bg-[#8A9A5B]/10 p-8 text-center space-y-4">
-        <h3 className="text-2xl font-bold text-[#2F3E33]">Want to Volunteer with a Serve Team?</h3>
-        <p className="text-sm text-[#5C6F62] max-w-xl mx-auto">
-          We welcome hands, hearts, and skills. Step out in faith and experience the joy of blessing others in Christ&apos;s name.
-        </p>
-        <Button asChild variant="terracotta" size="lg" className="font-semibold">
-          <Link href="/#give">
-            Join a Serve Team Today
-            <ArrowRight className="ml-2 h-4 w-4" />
-          </Link>
-        </Button>
-      </div>
-
-      {/* Back Link */}
-      <div className="pt-8 border-t border-[#E2D9CC] flex items-center justify-between">
-        <Button asChild variant="ghost" size="sm" className="text-xs text-[#5C6F62] hover:text-[#2F3E33]">
-          <Link href="/#cinematic-narrative" className="gap-1.5">
-            <ArrowLeft className="h-3.5 w-3.5" />
-            Return to Homepage Narrative
-          </Link>
-        </Button>
-      </div>
+      {/* 3D Globe & Comprehensive Directory */}
+      <OutreachesGlobeSection branches={branches} />
     </div>
   )
 }
