@@ -133,15 +133,15 @@ export function ClosingPortal() {
             </CardContent>
           </Card>
 
-          {/* Card 3: Connection Portal */}
+          {/* Card 3: Life Groups & Fellowship */}
           <Card className="border-[#E2D9CC] bg-white shadow-md flex flex-col justify-between">
             <CardHeader className="space-y-3">
               <div className="flex h-12 w-12 items-center justify-center rounded-xl bg-[#C1683B] text-white">
-                <Heart className="h-6 w-6" />
+                <Users className="h-6 w-6" />
               </div>
-              <CardTitle className="text-xl text-[#2F3E33]">Connection Portal</CardTitle>
+              <CardTitle className="text-xl text-[#2F3E33]">Life Groups &amp; Fellowship</CardTitle>
               <CardDescription className="text-[#5C6F62]">
-                Take your next step in the spiritual journey today.
+                Grow deeper together in authentic community, weekly discipleship, and prayer.
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-3 pt-0">
@@ -152,9 +152,9 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start font-medium"
                 >
-                  <a href="#about" className="inline-flex items-center gap-2">
+                  <a href="#connect" className="inline-flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-[#E3A857]" />
-                    I&apos;m New / First-Time Visitor Card
+                    Join a Life Group / Circle
                   </a>
                 </Button>
 
@@ -164,7 +164,7 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start font-medium"
                 >
-                  <a href="#announcements" className="inline-flex items-center gap-2">
+                  <a href="#give" className="inline-flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-white" />
                     Submit Prayer Request &amp; Praise
                   </a>
@@ -176,9 +176,9 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start border-[#E2D9CC] hover:bg-[#EFE8DC]/60"
                 >
-                  <a href="#about" className="inline-flex items-center gap-2 text-[#2F3E33]">
-                    <Users className="h-4 w-4 text-[#8A9A5B]" />
-                    Volunteer &amp; Join a Ministry Pillar
+                  <a href="#outreaches" className="inline-flex items-center gap-2 text-[#2F3E33]">
+                    <Heart className="h-4 w-4 text-[#C1683B]" />
+                    Volunteer &amp; Join a Serve Team
                   </a>
                 </Button>
 
@@ -186,17 +186,17 @@ export function ClosingPortal() {
                   asChild
                   variant="ghost"
                   size="sm"
-                  className="w-full justify-start text-xs text-[#5C6F62] hover:text-[#2F3E33]"
+                  className="w-full justify-start text-xs text-[#2F3E33] hover:text-[#C1683B] hover:bg-[#EFE8DC]/50"
                 >
-                  <Link href="/admin" className="inline-flex items-center gap-2">
-                    <ExternalLink className="h-3.5 w-3.5" />
-                    Payload CMS Leadership Portal
-                  </Link>
+                  <a href="#give" className="inline-flex items-center gap-2">
+                    <Sparkles className="h-3.5 w-3.5 text-[#E3A857]" />
+                    Generosity &amp; Kingdom Giving
+                  </a>
                 </Button>
               </div>
 
               <div className="rounded-lg bg-[#EFE8DC]/80 p-3 text-[11px] text-[#5C6F62] leading-relaxed">
-                <strong className="text-[#2F3E33]">Need pastoral care?</strong> Our servant leaders are available after
+                <strong className="text-[#2F3E33]">Need pastoral care?</strong> Our pastoral team and servant leaders are available after
                 every service or by visiting our hospitality center.
               </div>
             </CardContent>

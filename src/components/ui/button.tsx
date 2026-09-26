@@ -24,6 +24,8 @@ const buttonVariants = cva(
           "bg-[var(--deep-forest)] text-[var(--warm-ivory)] shadow hover:brightness-125",
         sage:
           "bg-[var(--olive-sage)] text-white shadow-sm hover:brightness-110",
+        "outline-white":
+          "border border-white/40 bg-white/10 text-white shadow-sm backdrop-blur-sm hover:bg-white hover:text-[#2F3E33] hover:border-white transition-all font-semibold",
       },
       size: {
         default: "h-9 px-4 py-2",

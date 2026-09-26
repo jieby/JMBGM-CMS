@@ -7,7 +7,7 @@ import './globals.css'
 export const metadata: Metadata = {
   title: 'JMBGM | Jesus the Master Builder Global Ministry',
   description:
-    'Proclaiming truth, building disciples, and transforming lives through faith. Built with Next.js 16, Payload CMS 3, Supabase, and ShadCN UI.',
+    'Jesus the Master Builder Global Ministry. Proclaiming truth, building disciples, and transforming communities through Christ.',
 }
 
 export default function FrontendLayout({

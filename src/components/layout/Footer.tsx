@@ -1,5 +1,5 @@
 import Link from "next/link"
-import { Church, Heart } from "lucide-react"
+import { Church, Heart, Clock, MapPin, Mail, Phone } from "lucide-react"
 
 export function Footer() {
   return (
@@ -19,64 +19,88 @@ export function Footer() {
             <p className="text-sm text-[#FBF6EE]/75 leading-relaxed">
               Jesus the Master Builder Global Ministry. Proclaiming truth, building disciples, and transforming communities through Christ.
             </p>
+            <div className="pt-2 text-xs text-[#E3A857] font-serif italic">
+              &ldquo;For every house is built by someone, but God is the builder of everything.&rdquo; — Hebrews 3:4
+            </div>
           </div>
 
           {/* Quick links */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-[#8A9A5B]">
-              Quick Links
+              Ministry Navigation
             </h4>
-            <ul className="space-y-2 text-sm text-[#FBF6EE]/75">
+            <ul className="grid grid-cols-2 gap-2 text-sm text-[#FBF6EE]/75">
               <li>
-                <Link href="/" className="transition-colors hover:text-[#C1683B]">
+                <Link href="#cinematic-narrative" className="transition-colors hover:text-[#C1683B]">
                   Home
                 </Link>
               </li>
               <li>
-                <Link href="#announcements" className="transition-colors hover:text-[#C1683B]">
-                  Announcements & Events
+                <Link href="#connect" className="transition-colors hover:text-[#C1683B]">
+                  Connect
                 </Link>
               </li>
               <li>
-                <Link href="#about" className="transition-colors hover:text-[#C1683B]">
-                  About the Ministry
+                <Link href="#outreaches" className="transition-colors hover:text-[#C1683B]">
+                  Outreaches
                 </Link>
               </li>
               <li>
-                <Link href="/admin" className="transition-colors hover:text-[#C1683B]">
-                  Payload Admin CMS
+                <Link href="#events" className="transition-colors hover:text-[#C1683B]">
+                  Events
+                </Link>
+              </li>
+              <li>
+                <Link href="#media" className="transition-colors hover:text-[#C1683B]">
+                  Media
+                </Link>
+              </li>
+              <li>
+                <Link href="#mission" className="transition-colors hover:text-[#C1683B]">
+                  Mission
+                </Link>
+              </li>
+              <li className="col-span-2">
+                <Link href="#give" className="font-medium text-[#E3A857] transition-colors hover:text-white">
+                  Give &amp; Prayer Requests →
                 </Link>
               </li>
             </ul>
           </div>
 
-          {/* Tech Stack badge */}
+          {/* Church Information */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-[#8A9A5B]">
-              Powered By
+              Church Information
             </h4>
-            <div className="flex flex-wrap gap-2 text-xs">
-              <span className="rounded bg-[#FBF6EE]/10 px-2.5 py-1 text-[#FBF6EE]">
-                Next.js 16 (App Router)
-              </span>
-              <span className="rounded bg-[#FBF6EE]/10 px-2.5 py-1 text-[#FBF6EE]">
-                Payload CMS 3
-              </span>
-              <span className="rounded bg-[#FBF6EE]/10 px-2.5 py-1 text-[#FBF6EE]">
-                Supabase Postgres
-              </span>
-              <span className="rounded bg-[#FBF6EE]/10 px-2.5 py-1 text-[#FBF6EE]">
-                ShadCN UI
-              </span>
+            <div className="space-y-2.5 text-xs text-[#FBF6EE]/80">
+              <div className="flex items-start gap-2">
+                <Clock className="h-4 w-4 text-[#E3A857] shrink-0 mt-0.5" />
+                <div>
+                  <p className="font-semibold text-[#FBF6EE]">Sunday Celebration: 10:00 AM</p>
+                  <p className="text-[#FBF6EE]/60">Midweek Word &amp; Prayer: Wednesday 7:00 PM</p>
+                </div>
+              </div>
+              <div className="flex items-start gap-2">
+                <MapPin className="h-4 w-4 text-[#C1683B] shrink-0 mt-0.5" />
+                <span>Main Campus Sanctuary &amp; Media Studio, Metro Manila, Philippines</span>
+              </div>
+              <div className="flex items-center gap-2">
+                <Mail className="h-4 w-4 text-[#8A9A5B] shrink-0" />
+                <a href="mailto:info@jmbgm.org" className="hover:text-white underline-offset-2 hover:underline">
+                  info@jmbgm.org
+                </a>
+              </div>
+              <div className="flex items-center gap-2">
+                <Phone className="h-4 w-4 text-[#8A9A5B] shrink-0" />
+                <span>+63 (02) 8123-4567 / +63 917 123 4567</span>
+              </div>
             </div>
-            <p className="text-xs text-[#FBF6EE]/60 pt-2">
-              SSR First • Mobile First • Strict CMS Architecture
-            </p>
           </div>
         </div>
 
         <div className="mt-8 border-t border-[#FBF6EE]/10 pt-6 flex flex-col sm:flex-row items-center justify-between gap-4 text-xs text-[#FBF6EE]/60">
-          <p>© {new Date().getFullYear()} JMBGM. All rights reserved.</p>
+          <p>© {new Date().getFullYear()} Jesus the Master Builder Global Ministry. All rights reserved.</p>
           <p className="flex items-center gap-1">
             Built with <Heart className="h-3 w-3 fill-[#C1683B] text-[#C1683B]" /> for JMBGM
           </p>

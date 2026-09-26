@@ -26,6 +26,14 @@ export const Announcements: CollectionConfig = {
       required: true,
     },
     {
+      name: 'image',
+      type: 'upload',
+      relationTo: 'media',
+      admin: {
+        description: 'Event flyer or banner photo',
+      },
+    },
+    {
       name: 'category',
       type: 'select',
       defaultValue: 'Announcement',

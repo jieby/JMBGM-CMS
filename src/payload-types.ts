@@ -72,6 +72,8 @@ export interface Config {
     pages: Page;
     announcements: Announcement;
     'story-chapters': StoryChapter;
+    sermons: Sermon;
+    outreaches: Outreach;
     'payload-kv': PayloadKv;
     'payload-locked-documents': PayloadLockedDocument;
     'payload-preferences': PayloadPreference;
@@ -84,6 +86,8 @@ export interface Config {
     pages: PagesSelect<false> | PagesSelect<true>;
     announcements: AnnouncementsSelect<false> | AnnouncementsSelect<true>;
     'story-chapters': StoryChaptersSelect<false> | StoryChaptersSelect<true>;
+    sermons: SermonsSelect<false> | SermonsSelect<true>;
+    outreaches: OutreachesSelect<false> | OutreachesSelect<true>;
     'payload-kv': PayloadKvSelect<false> | PayloadKvSelect<true>;
     'payload-locked-documents': PayloadLockedDocumentsSelect<false> | PayloadLockedDocumentsSelect<true>;
     'payload-preferences': PayloadPreferencesSelect<false> | PayloadPreferencesSelect<true>;
@@ -93,8 +97,12 @@ export interface Config {
     defaultIDType: number;
   };
   fallbackLocale: null;
-  globals: {};
-  globalsSelect: {};
+  globals: {
+    'site-settings': SiteSetting;
+  };
+  globalsSelect: {
+    'site-settings': SiteSettingsSelect<false> | SiteSettingsSelect<true>;
+  };
   locale: null;
   widgets: {
     collections: CollectionsWidget;
@@ -236,6 +244,10 @@ export interface Page {
 export interface Announcement {
   id: number;
   title: string;
+  /**
+   * Event flyer or banner photo
+   */
+  image?: (number | null) | Media;
   category: 'Announcement' | 'Sunday Service' | 'Event' | 'Ministry Update' | 'Community Outreach';
   date: string;
   /**
@@ -313,6 +325,67 @@ export interface StoryChapter {
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sermons".
+ */
+export interface Sermon {
+  id: number;
+  title: string;
+  speaker: string;
+  date: string;
+  /**
+   * Anchor scripture text (e.g. John 15:1-8, Matthew 28:19)
+   */
+  scripture?: string | null;
+  /**
+   * Teaching series name (e.g. The Master Builder, Sacred Foundations)
+   */
+  series?: string | null;
+  /**
+   * YouTube, Vimeo, or video stream URL
+   */
+  videoUrl?: string | null;
+  /**
+   * Sermon title graphic or video thumbnail photo
+   */
+  thumbnail?: (number | null) | Media;
+  /**
+   * Sermon summary, key takeaways, and reflection questions
+   */
+  summary?: string | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "outreaches".
+ */
+export interface Outreach {
+  id: number;
+  title: string;
+  category: 'Food Pantry' | 'Community Care' | 'Prison Ministry' | 'Youth Outreach';
+  /**
+   * High-resolution outreach activity photo or banner
+   */
+  image: number | Media;
+  /**
+   * Details of the outreach initiative, impact, and beneficiaries
+   */
+  description: string;
+  /**
+   * Schedule for volunteers (e.g. Every 2nd & 4th Saturday, 8:00 AM)
+   */
+  volunteerSchedule?: string | null;
+  /**
+   * Pin to top of homepage outreaches section
+   */
+  featured?: boolean | null;
+  updatedAt: string;
+  createdAt: string;
+  _status?: ('draft' | 'published') | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
  * via the `definition` "payload-kv".
  */
 export interface PayloadKv {
@@ -354,6 +427,14 @@ export interface PayloadLockedDocument {
     | ({
         relationTo: 'story-chapters';
         value: number | StoryChapter;
+      } | null)
+    | ({
+        relationTo: 'sermons';
+        value: number | Sermon;
+      } | null)
+    | ({
+        relationTo: 'outreaches';
+        value: number | Outreach;
       } | null);
   globalSlug?: string | null;
   user: {
@@ -495,6 +576,7 @@ export interface PagesSelect<T extends boolean = true> {
  */
 export interface AnnouncementsSelect<T extends boolean = true> {
   title?: T;
+  image?: T;
   category?: T;
   date?: T;
   location?: T;
@@ -518,6 +600,38 @@ export interface StoryChaptersSelect<T extends boolean = true> {
   scriptureRef?: T;
   scriptureText?: T;
   backgroundMedia?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "sermons_select".
+ */
+export interface SermonsSelect<T extends boolean = true> {
+  title?: T;
+  speaker?: T;
+  date?: T;
+  scripture?: T;
+  series?: T;
+  videoUrl?: T;
+  thumbnail?: T;
+  summary?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  _status?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "outreaches_select".
+ */
+export interface OutreachesSelect<T extends boolean = true> {
+  title?: T;
+  category?: T;
+  image?: T;
+  description?: T;
+  volunteerSchedule?: T;
+  featured?: T;
   updatedAt?: T;
   createdAt?: T;
   _status?: T;
@@ -561,6 +675,60 @@ export interface PayloadMigrationsSelect<T extends boolean = true> {
   batch?: T;
   updatedAt?: T;
   createdAt?: T;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings".
+ */
+export interface SiteSetting {
+  id: number;
+  /**
+   * Official QR Code image (GCash / Maya / QRPh / Bank Transfer)
+   */
+  givingQrCode?: (number | null) | Media;
+  /**
+   * Bank or payment institution name
+   */
+  givingBankName?: string | null;
+  /**
+   * Account holder name
+   */
+  givingAccountName?: string | null;
+  /**
+   * Bank account number or mobile giving reference
+   */
+  givingAccountNumber?: string | null;
+  /**
+   * Hero feature image for Global Mission & Church Planting
+   */
+  missionHeroImage?: (number | null) | Media;
+  /**
+   * Feature photo for Life Groups & Fellowship Gathering
+   */
+  connectHeroImage?: (number | null) | Media;
+  churchAddress?: string | null;
+  churchPhone?: string | null;
+  churchEmail?: string | null;
+  updatedAt?: string | null;
+  createdAt?: string | null;
+}
+/**
+ * This interface was referenced by `Config`'s JSON-Schema
+ * via the `definition` "site-settings_select".
+ */
+export interface SiteSettingsSelect<T extends boolean = true> {
+  givingQrCode?: T;
+  givingBankName?: T;
+  givingAccountName?: T;
+  givingAccountNumber?: T;
+  missionHeroImage?: T;
+  connectHeroImage?: T;
+  churchAddress?: T;
+  churchPhone?: T;
+  churchEmail?: T;
+  updatedAt?: T;
+  createdAt?: T;
+  globalType?: T;
 }
 /**
  * This interface was referenced by `Config`'s JSON-Schema

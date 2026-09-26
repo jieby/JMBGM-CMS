@@ -11,10 +11,13 @@ import {
 import { Separator } from "@/components/ui/separator"
 
 const navLinks = [
-  { href: "/", label: "Home" },
-  { href: "#announcements", label: "Announcements" },
-  { href: "#about", label: "About" },
-  { href: "/admin", label: "CMS Admin" },
+  { href: "#cinematic-narrative", label: "Home" },
+  { href: "#connect", label: "Connect" },
+  { href: "#outreaches", label: "Outreaches" },
+  { href: "#events", label: "Events" },
+  { href: "#media", label: "Media" },
+  { href: "#mission", label: "Mission" },
+  { href: "#give", label: "Give" },
 ]
 
 export function Header() {
@@ -22,7 +25,7 @@ export function Header() {
     <header className="sticky top-0 z-40 w-full border-b border-[#E2D9CC] bg-[#FBF6EE]/95 backdrop-blur-sm">
       <div className="mx-auto flex h-16 max-w-6xl items-center justify-between px-4 sm:px-6">
         {/* Logo / Brand */}
-        <Link href="/" className="flex items-center gap-2.5 transition-opacity hover:opacity-85">
+        <Link href="#cinematic-narrative" className="flex items-center gap-2.5 transition-opacity hover:opacity-85">
           <div className="flex h-9 w-9 items-center justify-center rounded-lg bg-[#2F3E33] text-[#FBF6EE]">
             <Church className="h-5 w-5" />
           </div>
@@ -47,9 +50,9 @@ export function Header() {
               {link.label}
             </Link>
           ))}
-          <Button asChild variant="terracotta" size="sm" className="font-semibold">
-            <Link href="/admin">
-              Admin Portal
+          <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-sm">
+            <Link href="#connect">
+              Plan a Visit
               <ArrowRight className="ml-1 h-3.5 w-3.5" />
             </Link>
           </Button>
@@ -94,9 +97,9 @@ export function Header() {
                   </Link>
                 ))}
                 <div className="pt-4">
-                  <Button asChild variant="terracotta" className="w-full font-semibold">
-                    <Link href="/admin">
-                      Open CMS Admin
+                  <Button asChild variant="terracotta" className="w-full font-semibold shadow-sm">
+                    <Link href="#connect">
+                      Plan a Visit
                       <ArrowRight className="ml-1 h-4 w-4" />
                     </Link>
                   </Button>

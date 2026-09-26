@@ -10,6 +10,9 @@ import { Media } from './collections/Media'
 import { Pages } from './collections/Pages'
 import { Announcements } from './collections/Announcements'
 import { StoryChapters } from './collections/StoryChapters'
+import { Sermons } from './collections/Sermons'
+import { Outreaches } from './collections/Outreaches'
+import { SiteSettings } from './globals/SiteSettings'
 
 const filename = fileURLToPath(import.meta.url)
 const dirname = path.dirname(filename)
@@ -21,7 +24,8 @@ export default buildConfig({
       baseDir: path.resolve(dirname),
     },
   },
-  collections: [Users, Media, Pages, Announcements, StoryChapters],
+  collections: [Users, Media, Pages, Announcements, StoryChapters, Sermons, Outreaches],
+  globals: [SiteSettings],
   editor: lexicalEditor(),
   secret: process.env.PAYLOAD_SECRET || 'jmbgm-app-development-secret-key-32-chars-long',
   typescript: {
