@@ -193,7 +193,7 @@ async function seed() {
         order: 4,
         chapterKey: 'mission',
         pillarName: 'Pillar IV • Mission',
-        headline: 'Footsteps on the Sand',
+        headline: 'Go therefore and make disciples of all the nations',
         subheadline:
           'Following Jesus into the nations. As the Holy Fire illuminates the shoreline, disciples walk directly in the footsteps of Christ, taking the gospel of peace to the ends of the earth.',
         scriptureRef: 'Romans 10:15 & Matthew 28:19–20',

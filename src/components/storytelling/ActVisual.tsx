@@ -115,9 +115,9 @@ export function ActVisual({ order, mediaUrl, alt, progress }: ActVisualProps) {
             onError={() => setVideoError(true)}
           />
         )}
-        {/* Subtle Dark Vignette (#2F3E33) to ensure white text readability */}
-        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2F3E33]/90 via-[#2F3E33]/45 to-[#2F3E33]/75" />
-        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_35%,rgba(47,62,51,0.88)_100%)]" />
+        {/* Subtle Dark Vignette (#2F3E33) rebalanced to keep center 100% vibrant while ensuring white text readability */}
+        <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#16221A]/80 via-transparent to-[#16221A]/40" />
+        <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_55%,rgba(22,34,26,0.70)_100%)]" />
       </div>
     )
   }
@@ -132,8 +132,8 @@ export function ActVisual({ order, mediaUrl, alt, progress }: ActVisualProps) {
       {order === 4 && <Act4FootstepsSand />}
 
       {/* Subtle Dark Vignette (#2F3E33) to ensure white text readability */}
-      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#2F3E33]/95 via-[#2F3E33]/45 to-[#2F3E33]/85" />
-      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_30%,rgba(47,62,51,0.9)_100%)]" />
+      <div className="pointer-events-none absolute inset-0 bg-gradient-to-t from-[#16221A]/85 via-transparent to-[#16221A]/50" />
+      <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(ellipse_at_center,transparent_50%,rgba(22,34,26,0.75)_100%)]" />
     </div>
   )
 }

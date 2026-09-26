@@ -68,8 +68,8 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
           ))}
         </div>
 
-        {/* Layer 2: Volumetric Shekinah Mist & Clouds */}
-        <AtmosphericClouds intensity={0.45} />
+        {/* Layer 2: Volumetric Shekinah Mist & Clouds - disabled to eliminate milky veil over video plates */}
+        {/* <AtmosphericClouds intensity={0.45} /> */}
 
         {/* Layer 3: Top Navigation Bar / Scrubber Header */}
         <header className="relative z-30 flex items-center justify-between px-8 pt-4 pb-2">
@@ -84,7 +84,7 @@ export function ScrollyStage({ acts }: ScrollyStageProps) {
           <nav className="flex items-center gap-2 rounded-full border border-white/10 bg-[#2F3E33]/70 backdrop-blur-md px-4 py-2 shadow-lg">
             {acts.map((act, index) => {
               const isActive = activeActIndex === index
-              const pillLabel = index === 0 ? 'JMBGM' : act.headline
+              const pillLabel = index === 0 ? 'JMBGM' : index === 4 ? 'All Nations' : act.headline
               return (
                 <button
                   key={act.chapterKey}
@@ -163,8 +163,10 @@ function ActVisualFrame({
     0: { inputs: [0.00, 0.10, 0.15, 1.00], outputs: [1, 1, 0, 0] },
     1: { inputs: [0.00, 0.10, 0.15, 0.35, 0.40, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
     2: { inputs: [0.00, 0.35, 0.40, 0.60, 0.65, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
-    3: { inputs: [0.00, 0.60, 0.65, 0.85, 0.90, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
-    4: { inputs: [0.00, 0.85, 0.90, 1.00], outputs: [0, 0, 1, 1] },
+    // Act 3 (Holy Fire on altar): Solid 0.65 to 0.80, fades out cleanly 0.80 to 0.85
+    3: { inputs: [0.00, 0.60, 0.65, 0.80, 0.85, 1.00], outputs: [0, 0, 1, 1, 0, 0] },
+    // Act 4 (Mission / Holy Fire on beach to Great Commission): Fades in 0.80 to 0.85, remaining solid through 1.00
+    4: { inputs: [0.00, 0.80, 0.85, 1.00], outputs: [0, 0, 1, 1] },
   }
 
   const actRange = ranges[index] || { inputs: [0, 1], outputs: [0, 0] }
@@ -177,7 +179,7 @@ function ActVisualFrame({
     1: { start: 0.14, end: 0.35 },
     2: { start: 0.39, end: 0.60 },
     3: { start: 0.64, end: 0.85 },
-    4: { start: 0.89, end: 1.00 },
+    4: { start: 0.83, end: 1.00 },
   }
 
   const windowRange = scrubWindows[index] || { start: 0, end: 1 }
@@ -243,15 +245,15 @@ function ActTypographyFrame({
       opacityOutputs: [0, 0, 1, 1, 0, 0],
       yOutputs: [30, 30, 0, 0, -30, -30],
     },
-    // Act 3: Enters 0.64-0.67, solid 0.67-0.83, exits 0.83-0.86, 0 everywhere else
+    // Act 3: Enters 0.64-0.67, solid 0.67-0.78, exits 0.78-0.81, 0 everywhere else
     3: {
-      inputs: [0.00, 0.64, 0.67, 0.83, 0.86, 1.00],
+      inputs: [0.00, 0.64, 0.67, 0.78, 0.81, 1.00],
       opacityOutputs: [0, 0, 1, 1, 0, 0],
       yOutputs: [30, 30, 0, 0, -30, -30],
     },
-    // Act 4: Enters 0.89-0.92, solid 0.92-1.00
+    // Act 4: Enters 0.88-0.91 (as fire lifts into embers), solid 0.91-1.00
     4: {
-      inputs: [0.00, 0.89, 0.92, 1.00],
+      inputs: [0.00, 0.88, 0.91, 1.00],
       opacityOutputs: [0, 0, 1, 1],
       yOutputs: [30, 30, 0, 0],
     },
@@ -290,7 +292,7 @@ function ActTypographyFrame({
       </div>
 
       {/* Main Cinematic Headline */}
-      <h2 className="text-3xl sm:text-4xl md:text-5xl lg:text-6xl font-extrabold tracking-tight text-[#FBF6EE] drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] leading-tight mb-5 max-w-3xl">
+      <h2 className="text-2xl sm:text-3xl md:text-4xl lg:text-5xl font-extrabold tracking-tight text-[#FBF6EE] drop-shadow-[0_4px_16px_rgba(0,0,0,0.7)] leading-tight mb-4 sm:mb-5 max-w-3xl">
         {act.headline}
       </h2>
 

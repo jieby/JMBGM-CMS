@@ -52,8 +52,8 @@ export function MobileStoryCards({ acts }: MobileStoryCardsProps) {
               />
             </div>
 
-            {/* Cloud and Mist Overlay */}
-            <AtmosphericClouds intensity={0.35} />
+            {/* Cloud and Mist Overlay - disabled to eliminate milky veil over video plates */}
+            {/* <AtmosphericClouds intensity={0.35} /> */}
 
             {/* Top Bar inside Card */}
             <header className="relative z-10 flex items-center justify-between">
