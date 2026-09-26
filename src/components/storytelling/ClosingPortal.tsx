@@ -12,6 +12,7 @@ import {
   Users,
   MessageSquare,
   Sparkles,
+  ArrowRight,
 } from 'lucide-react'
 
 export function ClosingPortal() {
@@ -34,6 +35,14 @@ export function ClosingPortal() {
             The journey from God&apos;s sovereign hand to the nations happens through local fellowship,
             disciplined prayer, and active mission. We invite you to join us this week.
           </p>
+          <div className="pt-2">
+            <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-sm">
+              <Link href="/connect">
+                Explore Connect Hub &amp; Life Groups
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* 3 Pillars Grid: Service Times, Venue Map, and Connection Portal */}
@@ -152,10 +161,10 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start font-medium"
                 >
-                  <a href="#connect" className="inline-flex items-center gap-2">
+                  <Link href="/connect" className="inline-flex items-center gap-2">
                     <Sparkles className="h-4 w-4 text-[#E3A857]" />
                     Join a Life Group / Circle
-                  </a>
+                  </Link>
                 </Button>
 
                 <Button
@@ -164,10 +173,10 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start font-medium"
                 >
-                  <a href="#give" className="inline-flex items-center gap-2">
+                  <Link href="/#give" className="inline-flex items-center gap-2">
                     <MessageSquare className="h-4 w-4 text-white" />
                     Submit Prayer Request &amp; Praise
-                  </a>
+                  </Link>
                 </Button>
 
                 <Button
@@ -176,10 +185,10 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start border-[#E2D9CC] hover:bg-[#EFE8DC]/60"
                 >
-                  <a href="#outreaches" className="inline-flex items-center gap-2 text-[#2F3E33]">
+                  <Link href="/outreaches" className="inline-flex items-center gap-2 text-[#2F3E33]">
                     <Heart className="h-4 w-4 text-[#C1683B]" />
                     Volunteer &amp; Join a Serve Team
-                  </a>
+                  </Link>
                 </Button>
 
                 <Button
@@ -188,10 +197,10 @@ export function ClosingPortal() {
                   size="sm"
                   className="w-full justify-start text-xs text-[#2F3E33] hover:text-[#C1683B] hover:bg-[#EFE8DC]/50"
                 >
-                  <a href="#give" className="inline-flex items-center gap-2">
+                  <Link href="/give" className="inline-flex items-center gap-2">
                     <Sparkles className="h-3.5 w-3.5 text-[#E3A857]" />
                     Generosity &amp; Kingdom Giving
-                  </a>
+                  </Link>
                 </Button>
               </div>
 
@@ -201,6 +210,22 @@ export function ClosingPortal() {
               </div>
             </CardContent>
           </Card>
+        </div>
+
+        {/* Bottom Banner Linking to Dedicated Connect Page */}
+        <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-[#E2D9CC] bg-white p-6 shadow-sm">
+          <div className="space-y-1 text-center sm:text-left">
+            <h4 className="text-base font-bold text-[#2F3E33]">Planning your first visit to JMBGM?</h4>
+            <p className="text-xs text-[#5C6F62]">
+              Learn about our welcome hospitality, kids ministry check-in, parking directions, and what to expect during worship.
+            </p>
+          </div>
+          <Button asChild variant="forest" size="sm" className="font-semibold shadow-sm whitespace-nowrap">
+            <Link href="/connect">
+              Open Full Connect Page
+              <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+            </Link>
+          </Button>
         </div>
       </div>
     </section>

@@ -1,6 +1,8 @@
 'use client'
 
 import React, { useRef, useEffect, useState, useMemo, useCallback } from 'react'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
@@ -15,6 +17,7 @@ import {
   Church,
   Sparkles,
   ChevronRight,
+  ArrowRight,
 } from 'lucide-react'
 
 export interface ChurchBranch {
@@ -105,6 +108,8 @@ const LANDMASS_POLYGONS: [number, number][][] = [
 ]
 
 export function OutreachesGlobeSection({ branches }: { branches: ChurchBranch[] }) {
+  const pathname = usePathname()
+  const isOutreachesPage = pathname === '/outreaches'
   const canvasRef = useRef<HTMLCanvasElement | null>(null)
   const containerRef = useRef<HTMLDivElement | null>(null)
 
@@ -439,9 +444,19 @@ export function OutreachesGlobeSection({ branches }: { branches: ChurchBranch[] 
               Rotate the interactive globe to explore our sister campuses, service times, and pastoral leadership.
             </p>
           </div>
-          <div className="flex items-center gap-2 text-xs text-[#E3A857] font-mono">
-            <Sparkles className="h-4 w-4 animate-pulse" />
-            <span>Interactive 3D Sphere • Drag to Rotate</span>
+          <div className="flex flex-col sm:flex-row sm:items-center gap-3 self-start sm:self-auto">
+            <div className="flex items-center gap-2 text-xs text-[#E3A857] font-mono">
+              <Sparkles className="h-4 w-4 animate-pulse" />
+              <span>Interactive 3D Sphere</span>
+            </div>
+            {!isOutreachesPage && (
+              <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-md">
+                <Link href="/outreaches">
+                  View Full Outreaches Page
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            )}
           </div>
         </div>
 
@@ -656,6 +671,24 @@ export function OutreachesGlobeSection({ branches }: { branches: ChurchBranch[] 
               )
             })}
           </div>
+
+          {/* Bottom Link to Dedicated Outreaches Page */}
+          {!isOutreachesPage && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10 rounded-2xl bg-[#1C2920]/80 p-5">
+              <div className="space-y-1 text-center sm:text-left">
+                <h4 className="text-sm font-bold text-white">Looking for complete campus schedules &amp; directions?</h4>
+                <p className="text-xs text-[#E2D9CC]/70">
+                  Explore our full campus directory with Google Maps navigation, lead pastor details, and weekly prayer schedules.
+                </p>
+              </div>
+              <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-md whitespace-nowrap">
+                <Link href="/outreaches">
+                  Open Full Outreaches Page
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

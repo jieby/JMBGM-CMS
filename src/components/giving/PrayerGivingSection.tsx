@@ -2,6 +2,8 @@
 
 import React, { useState } from 'react'
 import Image from 'next/image'
+import Link from 'next/link'
+import { usePathname } from 'next/navigation'
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Button } from '@/components/ui/button'
@@ -41,6 +43,8 @@ export function PrayerGivingSection({
   accountName = 'Jesus the Master Builder Global Ministry',
   accountNumber = '0012-3456-7890',
 }: PrayerGivingSectionProps) {
+  const pathname = usePathname()
+  const isGivePage = pathname === '/give'
   const [activeTab, setActiveTab] = useState<'pray' | 'direct'>('pray')
   const [category, setCategory] = useState(PRAYER_CATEGORIES[0])
   const [formData, setFormData] = useState({
@@ -84,6 +88,16 @@ export function PrayerGivingSection({
             Every prayer request is personally carried by our ministerial intercessory team.
             Your faithful tithes and offerings sustain our global discipleship, church plants, and community care.
           </p>
+          {!isGivePage && (
+            <div className="pt-2">
+              <Button asChild variant="outline" size="sm" className="border-[#C1683B] text-[#C1683B] hover:bg-[#C1683B] hover:text-white font-semibold">
+                <Link href="/give">
+                  View Dedicated Giving &amp; Stewardship Page
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
 
         {/* Tab Switcher */}
@@ -419,6 +433,24 @@ export function PrayerGivingSection({
               </CardContent>
             </Card>
           </div>
+
+          {/* Bottom Link to Dedicated Giving Page */}
+          {!isGivePage && (
+            <div className="flex flex-col sm:flex-row items-center justify-between gap-4 rounded-2xl border border-[#E2D9CC] bg-[#EFE8DC]/50 p-6 shadow-sm">
+              <div className="space-y-1 text-center sm:text-left">
+                <h4 className="text-base font-bold text-[#2F3E33]">Looking for bank wire transfers or recurring giving?</h4>
+                <p className="text-xs text-[#5C6F62]">
+                  Visit our dedicated stewardship page for international remittance guides, check designations, and donor receipt instructions.
+                </p>
+              </div>
+              <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-sm whitespace-nowrap">
+                <Link href="/give">
+                  Open Full Giving Page
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </div>
+          )}
         </div>
       </div>
     </section>

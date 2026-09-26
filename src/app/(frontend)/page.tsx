@@ -378,6 +378,15 @@ export default async function HomePage() {
               slug: b.slug,
             }))}
           />
+
+          <div className="flex flex-col sm:flex-row items-center justify-center gap-4 pt-4">
+            <Button asChild variant="terracotta" size="lg" className="font-semibold shadow-sm">
+              <Link href="/events">
+                View Full Events Calendar &amp; Archives
+                <ArrowRight className="ml-2 h-4 w-4" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -396,12 +405,14 @@ export default async function HomePage() {
                 Be fed spiritually through anointed biblical preaching, inductive verse-by-verse teachings, and worship livestreams.
               </p>
             </div>
-            <Button asChild variant="terracotta" size="sm" className="self-start sm:self-auto font-semibold shadow-md">
-              <a href="#media">
-                Watch Livestream
-                <Play className="ml-1.5 h-3.5 w-3.5 fill-white" />
-              </a>
-            </Button>
+            <div className="flex flex-wrap items-center gap-3">
+              <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-md">
+                <Link href="/media">
+                  Explore Full Media Archive
+                  <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+                </Link>
+              </Button>
+            </div>
           </div>
 
           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
@@ -455,6 +466,22 @@ export default async function HomePage() {
               </div>
             ))}
           </div>
+
+          {/* Bottom Link to Dedicated Media Page */}
+          <div className="flex flex-col sm:flex-row items-center justify-between gap-4 pt-4 border-t border-white/10 rounded-2xl bg-[#1C2920]/80 p-5">
+            <div className="space-y-1 text-center sm:text-left">
+              <h4 className="text-sm font-bold text-white">Need past message notes &amp; sermon series?</h4>
+              <p className="text-xs text-[#E2D9CC]/70">
+                Browse our complete searchable audio and video catalog with scripture references and study guides.
+              </p>
+            </div>
+            <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-md whitespace-nowrap">
+              <Link href="/media">
+                Open Full Media Library
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
         </div>
       </section>
 
@@ -483,13 +510,13 @@ export default async function HomePage() {
           </p>
           <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
             <Button asChild variant="terracotta" size="lg" className="w-full sm:w-auto font-semibold shadow-md">
-              <Link href="#connect">
+              <Link href="/#connect">
                 Plan Your Visit
                 <ArrowRight className="ml-2 h-4 w-4" />
               </Link>
             </Button>
             <Button asChild variant="outline-white" size="lg" className="w-full sm:w-auto">
-              <Link href="#give">
+              <Link href="/#give">
                 Submit Prayer Request
                 <Heart className="ml-2 h-4 w-4 text-[#E3A857]" />
               </Link>

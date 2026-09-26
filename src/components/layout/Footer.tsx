@@ -24,48 +24,35 @@ export function Footer() {
             </div>
           </div>
 
-          {/* Quick links */}
+          {/* Quick links & Dedicated Pages */}
           <div className="space-y-3">
             <h4 className="text-sm font-semibold uppercase tracking-wider text-[#8A9A5B]">
-              Ministry Navigation
+              Ministry Hubs &amp; Pages
             </h4>
-            <ul className="grid grid-cols-2 gap-2 text-sm text-[#FBF6EE]/75">
-              <li>
-                <Link href="#cinematic-narrative" className="transition-colors hover:text-[#C1683B]">
-                  Home
-                </Link>
-              </li>
-              <li>
-                <Link href="#connect" className="transition-colors hover:text-[#C1683B]">
-                  Connect
-                </Link>
-              </li>
-              <li>
-                <Link href="#outreaches" className="transition-colors hover:text-[#C1683B]">
-                  Outreaches
-                </Link>
-              </li>
-              <li>
-                <Link href="#events" className="transition-colors hover:text-[#C1683B]">
-                  Events
-                </Link>
-              </li>
-              <li>
-                <Link href="#media" className="transition-colors hover:text-[#C1683B]">
-                  Media
-                </Link>
-              </li>
-              <li>
-                <Link href="#mission" className="transition-colors hover:text-[#C1683B]">
-                  Mission
-                </Link>
-              </li>
-              <li className="col-span-2">
-                <Link href="#give" className="font-medium text-[#E3A857] transition-colors hover:text-white">
-                  Give &amp; Prayer Requests →
-                </Link>
-              </li>
-            </ul>
+            <div className="grid grid-cols-2 gap-x-4 gap-y-2 text-xs text-[#FBF6EE]/80">
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-mono tracking-wider text-[#E3A857] block">
+                  Overview
+                </span>
+                <p><Link href="/#cinematic-narrative" className="transition-colors hover:text-[#C1683B]">Home Overview</Link></p>
+                <p><Link href="/#connect" className="transition-colors hover:text-[#C1683B]">Connect &amp; Times</Link></p>
+                <p><Link href="/#outreaches" className="transition-colors hover:text-[#C1683B]">3D Globe Outreaches</Link></p>
+                <p><Link href="/#events" className="transition-colors hover:text-[#C1683B]">Upcoming Events</Link></p>
+                <p><Link href="/#media" className="transition-colors hover:text-[#C1683B]">Sermon Highlights</Link></p>
+                <p><Link href="/#mission" className="transition-colors hover:text-[#C1683B]">Apostolic Vision</Link></p>
+              </div>
+              <div className="space-y-1.5">
+                <span className="text-[10px] uppercase font-mono tracking-wider text-[#C1683B] block">
+                  Dedicated Pages
+                </span>
+                <p><Link href="/connect" className="transition-colors hover:text-white">Connect Hub</Link></p>
+                <p><Link href="/outreaches" className="transition-colors hover:text-white">Campuses Directory</Link></p>
+                <p><Link href="/events" className="transition-colors hover:text-white">Events Calendar</Link></p>
+                <p><Link href="/media" className="transition-colors hover:text-white">Sermon Archives</Link></p>
+                <p><Link href="/mission" className="transition-colors hover:text-white">Planter Academy</Link></p>
+                <p><Link href="/give" className="transition-colors hover:text-white">Give &amp; Prayer Hub</Link></p>
+              </div>
+            </div>
           </div>
 
           {/* Church Information */}

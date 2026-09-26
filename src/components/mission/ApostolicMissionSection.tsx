@@ -41,6 +41,14 @@ export function ApostolicMissionSection({
             Beyond established sanctuaries, JMBGM is an apostolic movement sent to break new ground,
             apprentice frontline planters, and establish enduring gospel beacons across urban centers and regional frontiers.
           </p>
+          <div className="pt-2">
+            <Button asChild variant="terracotta" size="sm" className="font-semibold shadow-sm">
+              <Link href="/mission">
+                Explore Full Apostolic Mission &amp; Academy
+                <ArrowRight className="ml-1.5 h-3.5 w-3.5" />
+              </Link>
+            </Button>
+          </div>
         </div>
 
         {/* The 3 Pillars of Mission */}
@@ -204,10 +212,10 @@ export function ApostolicMissionSection({
                   size="lg"
                   className="font-semibold shadow-md"
                 >
-                  <a href="#give">
+                  <Link href="/#give">
                     Sponsor a Church Plant
                     <Globe2 className="ml-2 h-4 w-4" />
-                  </a>
+                  </Link>
                 </Button>
                 <Button
                   asChild
